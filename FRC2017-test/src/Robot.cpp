@@ -1,14 +1,13 @@
 #include "WPILib.h"
-#include "Commands/Command.h"
-#include "Commands/ExampleCommand.h"
 #include "CommandBase.h"
 #include "Subsystems/Drivetrain.h"
-
+#include "Commands/Autonomous.h"
 
 class Robot: public IterativeRobot
 {
 private:
 	std::unique_ptr<Command> autonomousCommand;
+	//std::shared_ptr<Drivetrain> drivetrain;
 	Drivetrain *drivetrain;
 	SendableChooser *chooser;
 
@@ -17,7 +16,7 @@ private:
 		CommandBase::init();
 		drivetrain = new Drivetrain();
 		chooser = new SendableChooser();
-		chooser->AddDefault("Default Auto", new ExampleCommand());
+		chooser->AddDefault("Default Auto", new Autonomous());
 		//chooser->AddObject("My Auto", new MyAutoCommand());
 		SmartDashboard::PutData("Auto Modes", chooser);
 	}
