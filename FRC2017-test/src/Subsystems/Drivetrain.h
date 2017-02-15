@@ -14,6 +14,10 @@ private:
 	SpeedController *frontRightMotor;
 	SpeedController *rearRightMotor;
 
+	double encoderOffset = 0;
+	double wheelCircumference = 6*3.1415;
+
+
 	Joystick *mainDriveStick;
 
 	Encoder *frontLeftEncoder;
@@ -26,6 +30,9 @@ public:
 	void InitDefaultCommand();
 	void Drive(float x,float y,float z);
 	double GetEncoderSpeed(Encoder *enc);
+	double GetEncoderCount();
+	double GetEncoderDistance();
+	void InitEncoders();
 	void DriveWithStick();
 };
 
