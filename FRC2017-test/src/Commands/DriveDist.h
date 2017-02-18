@@ -8,11 +8,13 @@
  */
 class DriveDist: public CommandBase {
 public:
-	DriveDist();
+	DriveDist(double distance);
 	double Distance;
-	void Initialize() override;
-	bool IsFinished() override;
-	void End() override;
+	void Initialize();
+	void Execute();
+	bool IsFinished();
+	void End();
+	void Interrupted();
 };
 
 #endif  // DriveDist_H

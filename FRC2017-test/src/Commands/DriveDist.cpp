@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "Drivetrain.h"
+#include "../Subsystems/Drivetrain.h"
 #include "Robot.h"
 #include "DriveDist.h"
 
@@ -10,7 +10,6 @@ DriveDist::DriveDist(double distance)
 {
 	// Use Requires() here to declare subsystem dependencies
 	// eg. Requires(chassis);
-	Requires(Robot::drivetrain);
 	Distance = distance;
 }
 

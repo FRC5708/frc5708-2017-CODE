@@ -8,18 +8,18 @@
 #include "Subsystems/Drivetrain.h"
 #include "Commands/Autonomous.h"
 #include "Subsystems/Winch.h"
+#include "Subsystems/DriveTrain.h"
 
 class Robot: public frc::IterativeRobot {
 public:
-	static std::shared_ptr<DriveTrain> drivetrain;
+	static std::shared_ptr<Drivetrain> Robot::drivetrain;
+	std::unique_ptr<Command> autonomousCommand;
+	Drivetrain *mainDrivetrain;
+	Winch *winch;
+	//SendableChooser *chooser;
+	frc::LiveWindow* lw = frc::LiveWindow::GetInstance();
 
 private:
-	std::unique_ptr<Command> autonomousCommand;
-	std::shared_ptr<Drivetrain> drivetrain;
-	//Drivetrain *drivetrain;
-	Winch *winch;
-	SendableChooser *chooser;
-	frc::LiveWindow* lw = frc::LiveWindow::GetInstance();
 
 	void RobotInit() override;
 	void AutonomousInit() override;

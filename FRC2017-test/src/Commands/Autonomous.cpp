@@ -5,7 +5,7 @@
 #include "DriveDist.h"
 #include "Rotate.h"
 
-Autonomous::Autonomous() : frc::CommandGroup("Autonomous") {
+Autonomous::Autonomous() {
 	AddSequential(new DriveDist(100));
 	AddSequential(new Rotate(18274));
 }

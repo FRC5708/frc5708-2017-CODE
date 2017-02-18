@@ -1,5 +1,6 @@
 #include "Winch.h"
 #include "../RobotMap.h"
+#include "WPILIB.h"
 
 Winch::Winch() : Subsystem("Winch") {
 
@@ -13,8 +14,8 @@ Winch::Winch() : Subsystem("Winch") {
     leftMotor = new Victor(leftChannel);
     rightMotor = new Victor(rightChannel);
 
-    rightEncoder = new Encoder(4,5);
-    leftEncoder = new Encoder(6,7);
+    rightEncoder = new Encoder(8,9);
+    leftEncoder = new Encoder(8,9);
 
 
 }
@@ -31,7 +32,7 @@ double Winch::GetEncoderSpeed(Encoder* enc){
 
 void Winch::Drive(double speed){
 	leftMotor->Set(speed);
-	rMotor->Set(speed);
+	rightMotor->Set(speed);
 }
 
 void Winch::DriveWithJoystick(){

@@ -1,16 +1,23 @@
-#include Robot.h
+#include "Robot.h"
 
-std::shared_ptr<DriveTrain> Robot::drivetrain = std::make_shared<DriveTrain>();
+#include "WPILib.h"
+#include "CommandBase.h"
+#include "Subsystems/Drivetrain.h"
+#include "Commands/Autonomous.h"
+#include "Subsystems/Winch.h"
+#include "Subsystems/DriveTrain.h"
+
+std::shared_ptr<Drivetrain> Robot::drivetrain = std::make_shared<Drivetrain>();
 
 void RobotInit()
 {
 	CommandBase::init();
-	drivetrain = new Drivetrain();
+	mainDrivetrain = new Drivetrain();
 	winch = new Winch();
-	chooser = new SendableChooser();
-	chooser->AddDefault("Default Auto", new Autonomous());
+	//chooser = new SendableChooser();
+	//chooser->AddDefault("Default Auto", new Autonomous());
 	//chooser->AddObject("My Auto", new MyAutoCommand());
-	SmartDashboard::PutData("Auto Modes", chooser);
+	//SmartDashboard::PutData("Auto Modes", chooser);
 }
 
 /**    * This function is called once each time the robot enters Disabled mode.    * You can use it to reset any subsystem information you want to clear when
@@ -33,9 +40,9 @@ void AutonomousInit()
 	} else {
 		autonomousCommand.reset(new ExampleCommand());
 	} */
-	autonomousCommand.reset((Command *)chooser->GetSelected());
+	/*autonomousCommand.reset((Command *)chooser->GetSelected());
 	if (autonomousCommand != NULL)
-		autonomousCommand->Start();
+		autonomousCommand->Start();*/
 }
 
 void AutonomousPeriodic()
@@ -53,7 +60,7 @@ void TeleopInit()
 }
 void TeleopPeriodic()
 {
-	drivetrain->DriveWithStick();
+	mainDrivetrain->DriveWithStick();
 	winch->DriveWithJoystick();
 	Scheduler::GetInstance()->Run();
 }

@@ -8,11 +8,13 @@
  */
 class Rotate: public CommandBase {
 public:
-	Rotate();
+	Rotate(double time);
 	double Time;
-	void Initialize() override;
-	bool IsFinished() override;
-	void End() override;
+	void Initialize();
+	void Execute();
+	bool IsFinished();
+	void End();
+	void Interrupted();
 };
 
 #endif  // Rotate_H
