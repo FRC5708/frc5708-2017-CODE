@@ -33,13 +33,16 @@ class Robot: public frc::IterativeRobot {
 public:
 	
 	frc::Joystick* stick;
+	Drivetrain *mainDrivetrain;
+	Winch *winch;
+	bool driveInverted = false;
 	
 	//std::shared_ptr<Drivetrain> Robot::drivetrain = std::make_shared<Drivetrain>();
 
 	void RobotInit() override {
 		theRobot = this;
 		
-		CommandBase::init();
+		//CommandBase::init();
 		mainDrivetrain = new Drivetrain();
 		winch = new Winch();
 		//chooser = new SendableChooser();
@@ -181,14 +184,23 @@ public:
 	}
 	
 	void TeleopPeriodic() override {
+		driveInverted = usingFrontCamera;
 		
-		mainDrivetrain->DriveWithStick();
+		if (!driveInverted){
+			mainDrivetrain->DriveWithStick(1);
+		}else{
+			mainDrivetrain->DriveWithStick(-1);
+		}
+
 		winch->DriveWithJoystick();
 		Scheduler::GetInstance()->Run();
 		
 		frc::Scheduler::GetInstance()->Run();
 		
-		if (wasButtonJustPressed(3)) toggleCamera();
+		if (wasButtonJustPressed(3)){
+			toggleCamera();
+			driveInverted = !driveInverted;
+		}
 	}
 	
 	void TestPeriodic() override {
@@ -214,7 +226,7 @@ private:
 
 
 
-=======
+
 
 
 
