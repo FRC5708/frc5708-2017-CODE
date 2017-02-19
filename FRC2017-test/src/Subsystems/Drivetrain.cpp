@@ -34,6 +34,18 @@ double Drivetrain::GetEncoderSpeed(Encoder* enc){
 	return (1/enc->GetPeriod())/9;
 }
 
+double Drivetrain::GetEncoderCount(){
+	return (frontLeftEncoder->Get()/13.521)-encoderOffset;
+}
+
+double Drivetrain::GetEncoderDistance(){
+	return wheelCircumference*GetEncoderCount();
+}
+
+void Drivetrain::InitEncoders(){
+	encoderOffset = GetEncoderDistance();
+}
+
 
 void Drivetrain::Drive(float x,float y,float z){
 	float FL_speed = x+z+y;

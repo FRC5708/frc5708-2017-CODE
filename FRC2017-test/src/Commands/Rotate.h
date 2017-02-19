@@ -1,7 +1,7 @@
 #ifndef Rotate_H
 #define Rotate_H
 
-#include "CommandBase.h"
+#include <Commands/CommandGroup.h>
 
 /**
  * The main Rotate command to pickup and deliver the soda to the box.

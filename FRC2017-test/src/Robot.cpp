@@ -12,10 +12,17 @@
 #include <Joystick.h>
 
 #include "Commands/ExampleCommand.h"
-#include "CommandBase.h"
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/types.hpp>
+
+
+#include "WPILib.h"
+#include "CommandBase.h"
+#include "Subsystems/Drivetrain.h"
+//#include "Commands/Autonomous.h"
+#include "Subsystems/Winch.h"
+#include "Subsystems/DriveTrain.h"
 
 
 // for access from static functions. ENSURE THREAD SAFETY!
@@ -26,47 +33,49 @@ class Robot: public frc::IterativeRobot {
 public:
 	
 	frc::Joystick* stick;
-	//NetworkTable* netTable;
 	
-	
+	//std::shared_ptr<Drivetrain> Robot::drivetrain = std::make_shared<Drivetrain>();
+
 	void RobotInit() override {
 		theRobot = this;
 		
-		chooser.AddDefault("Default Auto", new ExampleCommand());
-		// chooser.AddObject("My Auto", new MyAutoCommand());
-		frc::SmartDashboard::PutData("Auto Modes", &chooser);
-		
-		//CameraServer::GetInstance()->StartAutomaticCapture(0);
+		CommandBase::init();
+		mainDrivetrain = new Drivetrain();
+		winch = new Winch();
+		//chooser = new SendableChooser();
+		//chooser->AddDefault("Default Auto", new Autonomous());
+		//chooser->AddObject("My Auto", new MyAutoCommand());
+		//SmartDashboard::PutData("Auto Modes", chooser);
+
 		
 		stick = new frc::Joystick(0);
-		//netTable = NetworkTable::GetTable("datatable");
 		
-
+		
 		cs::UsbCamera cam0 = CameraServer::GetInstance()->StartAutomaticCapture("front", 0);
 		cam0.SetResolution(320, 240);
 		cs::UsbCamera cam1 = CameraServer::GetInstance()->StartAutomaticCapture("back", 1);
 		cam1.SetResolution(320, 240);
-
-
+		
+		
 		std::thread cameraThreadObj(cameraThread);
 		cameraThreadObj.detach();
-
+		
 		printf("initialized robot");
 	}
-
+	
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
 	 * You can use it to reset any subsystem information you want to clear when
 	 * the robot is disabled.
 	 */
 	void DisabledInit() override {
-
+		
 	}
-
+	
 	void DisabledPeriodic() override {
 		frc::Scheduler::GetInstance()->Run();
 	}
-
+	
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
 	 * between different autonomous modes using the dashboard. The sendable
@@ -80,24 +89,24 @@ public:
 	 */
 	void AutonomousInit() override {
 		/* std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
-		if (autoSelected == "My Auto") {
+		 if (autoSelected == "My Auto") {
 			autonomousCommand.reset(new MyAutoCommand());
-		}
-		else {
+		 }
+		 else {
 			autonomousCommand.reset(new ExampleCommand());
-		} */
-
+		 } */
+		
 		autonomousCommand.reset(chooser.GetSelected());
-
+		
 		if (autonomousCommand.get() != nullptr) {
 			autonomousCommand->Start();
 		}
 	}
-
+	
 	void AutonomousPeriodic() override {
 		frc::Scheduler::GetInstance()->Run();
 	}
-
+	
 	void TeleopInit() override {
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
@@ -117,16 +126,16 @@ public:
 		//cam0.SetResolution(640, 480);
 		//cs::UsbCamera cam1 = CameraServer::GetInstance()->StartAutomaticCapture(1);
 		//cam1.SetResolution(640, 480);
-
+		
 		cs::CvSink frontSink = CameraServer::GetInstance()->GetVideo("front");
 		cs::CvSink backSink = CameraServer::GetInstance()->GetVideo("back");
 		//backSink.SetEnabled(false);
-
-
-
+		
+		
+		
 		cv::Mat mat;
 		while(true) {
-		// access once for thread safety
+			// access once for thread safety
 			volatile bool usingFront = theRobot->usingFrontCamera;
 			
 			if (usingFront) {
@@ -153,7 +162,7 @@ public:
 	}
 	
 	
-
+	
 	// system for button handlers.
 	// call from TeleopPeriodic(). If true, call function associated with button.
 	
@@ -172,11 +181,16 @@ public:
 	}
 	
 	void TeleopPeriodic() override {
+		
+		mainDrivetrain->DriveWithStick();
+		winch->DriveWithJoystick();
+		Scheduler::GetInstance()->Run();
+		
 		frc::Scheduler::GetInstance()->Run();
-	
+		
 		if (wasButtonJustPressed(3)) toggleCamera();
 	}
-
+	
 	void TestPeriodic() override {
 		frc::LiveWindow::GetInstance()->Run();
 	}
@@ -188,16 +202,25 @@ public:
 		usingFrontCamera = !usingFrontCamera;
 		
 		printf("toggling cameras");
-
+		
 		//if (usingFrontCamera) CameraServer::GetInstance()->StartAutomaticCapture(0);
 		//else CameraServer::GetInstance()->StartAutomaticCapture(1);
 	}
-
+	
 private:
 	std::unique_ptr<frc::Command> autonomousCommand;
 	frc::SendableChooser<frc::Command*> chooser;
 };
 
 
+
+=======
+
+
+
+void TestPeriodic()
+{
+	LiveWindow::GetInstance()->Run();
+}
 
 START_ROBOT_CLASS(Robot)

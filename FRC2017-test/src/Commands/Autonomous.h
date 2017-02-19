@@ -6,7 +6,7 @@
 /**
  * The main autonomous command to pickup and deliver the soda to the box.
  */
-class Autonomous: public frc::CommandGroup {
+class Autonomous: public CommandBase {
 public:
 	Autonomous();
 };

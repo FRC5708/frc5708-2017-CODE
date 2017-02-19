@@ -2,17 +2,15 @@
 #define EXAMPLE_COMMAND_H
 
 #include "../CommandBase.h"
-#include "WPILib.h"
 
-class ExampleCommand: public CommandBase
-{
+class ExampleCommand: public CommandBase {
 public:
 	ExampleCommand();
-	void Initialize();
-	void Execute();
-	bool IsFinished();
-	void End();
-	void Interrupted();
+	void Initialize() override;
+	void Execute() override;
+	bool IsFinished() override;
+	void End() override;
+	void Interrupted() override;
 };
 
-#endif
+#endif  // EXAMPLE_COMMAND_H
