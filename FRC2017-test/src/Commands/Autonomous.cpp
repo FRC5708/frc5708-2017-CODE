@@ -1,5 +1,4 @@
-/*
- #include "Autonomous.h"
+#include "Autonomous.h"
 
 #include <iostream>
 
@@ -10,4 +9,3 @@ Autonomous::Autonomous() {
 	AddSequential(new DriveDist(100));
 	AddSequential(new Rotate(18274));
 }
-*/

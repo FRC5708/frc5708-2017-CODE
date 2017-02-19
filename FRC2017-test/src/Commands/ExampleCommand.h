@@ -1,5 +1,3 @@
-/*
-
 #ifndef EXAMPLE_COMMAND_H
 #define EXAMPLE_COMMAND_H
 
@@ -16,4 +14,3 @@ public:
 };
 
 #endif  // EXAMPLE_COMMAND_H
-*/

@@ -1,5 +1,3 @@
-/*
-
 #include "ExampleCommand.h"
 
 ExampleCommand::ExampleCommand() {
@@ -32,4 +30,3 @@ void ExampleCommand::End() {
 void ExampleCommand::Interrupted() {
 
 }
-*/
