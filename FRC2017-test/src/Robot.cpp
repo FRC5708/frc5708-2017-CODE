@@ -122,30 +122,31 @@ public:
 		
 		cs::CvSource output = CameraServer::GetInstance()->PutVideo("Camera", 320, 240);
 		
-		//cs::UsbCamera cam0 = CameraServer::GetInstance()->StartAutomaticCapture(0);
-		//cam0.SetResolution(640, 480);
-		//cs::UsbCamera cam1 = CameraServer::GetInstance()->StartAutomaticCapture(1);
-		//cam1.SetResolution(640, 480);
-		
 		cs::CvSink frontSink = CameraServer::GetInstance()->GetVideo("front");
 		cs::CvSink backSink = CameraServer::GetInstance()->GetVideo("back");
-		//backSink.SetEnabled(false);
-		
-		
 		
 		cv::Mat mat;
+		bool oldUsingFront = theRobot->usingFrontCamera;
 		while(true) {
 			// access once for thread safety
 			volatile bool usingFront = theRobot->usingFrontCamera;
+			if (usingFront != oldUsingFront) {
+				if (usingFront) {
+					backSink.SetEnabled(false);
+					frontSink.SetEnabled(true);
+				}
+				else {
+					frontSink.SetEnabled(false);
+					backSink.SetEnabled(true);
+				}
+			}
+			oldUsingFront = usingFrontCamera;
+			
 			
 			if (usingFront) {
-				frontSink.SetEnabled(true);
-				backSink.SetEnabled(false);
 				pushFrame(frontSink, output, mat);
 			}
 			else {
-				backSink.SetEnabled(true);
-				frontSink.SetEnabled(false);
 				pushFrame(backSink, output, mat);
 			}
 		}
@@ -202,9 +203,6 @@ public:
 		usingFrontCamera = !usingFrontCamera;
 		
 		printf("toggling cameras");
-		
-		//if (usingFrontCamera) CameraServer::GetInstance()->StartAutomaticCapture(0);
-		//else CameraServer::GetInstance()->StartAutomaticCapture(1);
 	}
 	
 private:
