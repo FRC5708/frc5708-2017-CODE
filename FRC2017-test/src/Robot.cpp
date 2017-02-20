@@ -11,18 +11,15 @@
 #include <CameraServer.h>
 #include <Joystick.h>
 
-#include "Commands/ExampleCommand.h"
-
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/types.hpp>
-
-
+#include <Subsystems/Drivetrain.h>
+#include <Subsystems/Drivetrain.h>
 #include "WPILib.h"
 #include "CommandBase.h"
-#include "Subsystems/Drivetrain.h"
-//#include "Commands/Autonomous.h"
 #include "Subsystems/Winch.h"
-#include "Subsystems/DriveTrain.h"
+#include "Globals.h"
+
 
 
 // for access from static functions. ENSURE THREAD SAFETY!
@@ -32,8 +29,8 @@ Robot* theRobot;
 class Robot: public frc::IterativeRobot {
 public:
 	
-	frc::Joystick* stick;
-	Drivetrain *mainDrivetrain;
+	Joystick* stick;
+	Drivetrain *drivetrain;
 	Winch *winch;
 	bool driveInverted = false;
 	
@@ -43,12 +40,9 @@ public:
 		theRobot = this;
 		
 		//CommandBase::init();
-		mainDrivetrain = new Drivetrain();
+		drivetrain = new Drivetrain();
+		theDrivetrain = drivetrain;
 		winch = new Winch();
-		//chooser = new SendableChooser();
-		//chooser->AddDefault("Default Auto", new Autonomous());
-		//chooser->AddObject("My Auto", new MyAutoCommand());
-		//SmartDashboard::PutData("Auto Modes", chooser);
 
 		
 		stick = new frc::Joystick(0);
@@ -66,11 +60,7 @@ public:
 		printf("initialized robot");
 	}
 	
-	/**
-	 * This function is called once each time the robot enters Disabled mode.
-	 * You can use it to reset any subsystem information you want to clear when
-	 * the robot is disabled.
-	 */
+
 	void DisabledInit() override {
 		
 	}
@@ -79,17 +69,7 @@ public:
 		frc::Scheduler::GetInstance()->Run();
 	}
 	
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * GetString code to get the auto name from the text box below the Gyro.
-	 *
-	 * You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the if-else structure below with additional strings & commands.
-	 */
+
 	void AutonomousInit() override {
 		/* std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
 		 if (autoSelected == "My Auto") {
@@ -98,8 +78,7 @@ public:
 		 else {
 			autonomousCommand.reset(new ExampleCommand());
 		 } */
-		
-		autonomousCommand.reset(chooser.GetSelected());
+
 		
 		if (autonomousCommand.get() != nullptr) {
 			autonomousCommand->Start();
@@ -111,10 +90,6 @@ public:
 	}
 	
 	void TeleopInit() override {
-		// This makes sure that the autonomous stops running when
-		// teleop starts running. If you want the autonomous to
-		// continue until interrupted by another command, remove
-		// this line or comment it out.
 		if (autonomousCommand != nullptr) {
 			autonomousCommand->Cancel();
 		}
@@ -125,30 +100,31 @@ public:
 		
 		cs::CvSource output = CameraServer::GetInstance()->PutVideo("Camera", 320, 240);
 		
-		//cs::UsbCamera cam0 = CameraServer::GetInstance()->StartAutomaticCapture(0);
-		//cam0.SetResolution(640, 480);
-		//cs::UsbCamera cam1 = CameraServer::GetInstance()->StartAutomaticCapture(1);
-		//cam1.SetResolution(640, 480);
-		
 		cs::CvSink frontSink = CameraServer::GetInstance()->GetVideo("front");
 		cs::CvSink backSink = CameraServer::GetInstance()->GetVideo("back");
-		//backSink.SetEnabled(false);
-		
-		
 		
 		cv::Mat mat;
+		bool oldUsingFront = theRobot->usingFrontCamera;
 		while(true) {
 			// access once for thread safety
 			volatile bool usingFront = theRobot->usingFrontCamera;
+			if (usingFront != oldUsingFront) {
+				if (usingFront) {
+					backSink.SetEnabled(false);
+					frontSink.SetEnabled(true);
+				}
+				else {
+					frontSink.SetEnabled(false);
+					backSink.SetEnabled(true);
+				}
+			}
+			oldUsingFront = usingFront;
+			
 			
 			if (usingFront) {
-				frontSink.SetEnabled(true);
-				backSink.SetEnabled(false);
 				pushFrame(frontSink, output, mat);
 			}
 			else {
-				backSink.SetEnabled(true);
-				frontSink.SetEnabled(false);
 				pushFrame(backSink, output, mat);
 			}
 		}
@@ -185,11 +161,11 @@ public:
 	
 	void TeleopPeriodic() override {
 		driveInverted = usingFrontCamera;
-		
-		if (!driveInverted){
-			mainDrivetrain->DriveWithStick(1);
+
+		if (driveInverted){
+			drivetrain->DriveWithStick(-1);
 		}else{
-			mainDrivetrain->DriveWithStick(-1);
+			drivetrain->DriveWithStick(1);
 		}
 
 		winch->DriveWithJoystick();
@@ -197,10 +173,7 @@ public:
 		
 		frc::Scheduler::GetInstance()->Run();
 		
-		if (wasButtonJustPressed(3)){
-			toggleCamera();
-			driveInverted = !driveInverted;
-		}
+		if (wasButtonJustPressed(3)) toggleCamera();
 	}
 	
 	void TestPeriodic() override {
@@ -214,19 +187,11 @@ public:
 		usingFrontCamera = !usingFrontCamera;
 		
 		printf("toggling cameras");
-		
-		//if (usingFrontCamera) CameraServer::GetInstance()->StartAutomaticCapture(0);
-		//else CameraServer::GetInstance()->StartAutomaticCapture(1);
 	}
 	
 private:
 	std::unique_ptr<frc::Command> autonomousCommand;
-	frc::SendableChooser<frc::Command*> chooser;
 };
-
-
-
-
 
 
 

@@ -1,12 +1,9 @@
-/*
-
+#include <Subsystems/Drivetrain.h>
 #include "Rotate.h"
+#include "Globals.h"
 
 #include <iostream>
 
-#include "../Subsystems/Drivetrain.h"
-#include "Robot.h"
-#include "Rotate.h"
 
 Rotate::Rotate(double time)
 {
@@ -19,13 +16,13 @@ Rotate::Rotate(double time)
 // Called just before this Command runs the first time
 void Rotate::Initialize()
 {
-	Robot::drivetrain->InitEncoders();
+	theDrivetrain->InitEncoders();
 }
 
 // Called repeatedly when this Command is scheduled to run
 void Rotate::Execute()
 {
-	Robot::drivetrain->Drive(0,0,.2);
+	theDrivetrain->Drive(0,0,.5);
 	Time -= 1;
 }
 
@@ -38,7 +35,7 @@ bool Rotate::IsFinished()
 // Called once after isFinished returns true
 void Rotate::End()
 {
-	Robot::drivetrain->Drive(0,0,0);
+	theDrivetrain->Drive(0,0,0);
 	Time = 0;
 }
 
@@ -47,4 +44,3 @@ void Rotate::End()
 void Rotate::Interrupted()
 {
 }
-*/

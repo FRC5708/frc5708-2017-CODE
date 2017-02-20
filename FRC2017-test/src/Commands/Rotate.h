@@ -1,12 +1,12 @@
-/*
-
 #ifndef Rotate_H
 #define Rotate_H
 
-#include <Commands/CommandGroup.h>
+#include <Commands/Command.h>
 
-
-class Rotate: public CommandBase {
+/**
+ * The main Rotate command to pickup and deliver the soda to the box.
+ */
+class Rotate: public frc::Command {
 public:
 	Rotate(double time);
 	double Time;
@@ -18,4 +18,3 @@ public:
 };
 
 #endif  // Rotate_H
-*/

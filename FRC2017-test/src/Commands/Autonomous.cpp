@@ -1,13 +1,11 @@
-/*
- #include "Autonomous.h"
+#include "Autonomous.h"
 
 #include <iostream>
 
-#include "DriveDist.h"
+#include "DriveStraight.h"
 #include "Rotate.h"
 
 Autonomous::Autonomous() {
-	AddSequential(new DriveDist(100));
-	AddSequential(new Rotate(18274));
+	AddSequential(new DriveStraight(1000));
+	AddSequential(new Rotate(10));
 }
-*/
