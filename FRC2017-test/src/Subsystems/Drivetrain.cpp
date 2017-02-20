@@ -1,8 +1,8 @@
-#include "Drivetrain.h"
+#include <Subsystems/Drivetrain.h>
 #include "../RobotMap.h"
 #include "WPILib.h"
 #include <vector>
-#include "Robot.cpp"
+#include "Globals.h"
 
 Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
@@ -36,15 +36,15 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     rearRightController = new PIDController(4, 0, 0, new rearRightPIDSource(),
     		new rearRightPIDOutput());
 
-    encoders = new std::vector<Encoder*>();
+    encoders = std::vector<Encoder*>();
     encoders = {frontLeftEncoder, rearLeftEncoder,
     			frontRightEncoder, rearRightEncoder};
 
-    motors = new std::vector<SpeedController*>();
+    motors = std::vector<SpeedController*>();
     motors = {frontLeftMotor, rearLeftMotor,
         	  frontRightMotor, rearRightMotor};
 
-    controllers = new std::vector<PIDController*>();
+    controllers = std::vector<PIDController*>();
     controllers = {frontLeftController, rearLeftController,
                    frontRightController, rearRightController};
 
@@ -108,30 +108,30 @@ void Drivetrain::DriveWithStick(int facing){
 }
 
 double frontLeftPIDSource::PIDGet() {
-	return theRobot->drivetrain->GetEncoderDistance(0);
+	return theDrivetrain->GetEncoderDistance(0);
 }
 
 void frontLeftPIDOutput::PIDWrite(double d) {
-	theRobot->drivetrain->DriveMotor(0,d);
+	theDrivetrain->DriveMotor(0,d);
 }
 double rearLeftPIDSource::PIDGet() {
-	return theRobot->drivetrain->GetEncoderDistance(1);
+	return theDrivetrain->GetEncoderDistance(1);
 }
 
 void rearLeftPIDOutput::PIDWrite(double d) {
-	theRobot->drivetrain->DriveMotor(1,d);
+	theDrivetrain->DriveMotor(1,d);
 }
 double frontRightPIDSource::PIDGet() {
-	return theRobot->drivetrain->GetEncoderDistance(2);
+	return theDrivetrain->GetEncoderDistance(2);
 }
 
 void frontRightPIDOutput::PIDWrite(double d) {
-	theRobot->drivetrain->DriveMotor(0,2);
+	theDrivetrain->DriveMotor(0,2);
 }
 double rearRightPIDSource::PIDGet() {
-	return theRobot->drivetrain->GetEncoderDistance(3);
+	return theDrivetrain->GetEncoderDistance(3);
 }
 
 void rearRightPIDOutput::PIDWrite(double d) {
-	theRobot->Robot::drivetrain->DriveMotor(3,d);
+	theDrivetrain->DriveMotor(3,d);
 }

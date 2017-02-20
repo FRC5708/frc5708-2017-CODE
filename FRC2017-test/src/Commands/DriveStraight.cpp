@@ -1,8 +1,9 @@
 #include "DriveStraight.h"
+#include "Globals.h"
 
 #include <PIDController.h>
+#include <Subsystems/Drivetrain.h>
 
-#include "Robot.cpp"
 
 DriveStraight::DriveStraight(double distance) {
 	//Requires(Robot::drivetrain.get());
@@ -15,7 +16,7 @@ DriveStraight::DriveStraight(double distance) {
 // Called just before this Command runs the first time
 void DriveStraight::Initialize() {
 	// Get everything in a safe starting state.
-	theRobot->drivetrain->InitEncoders();
+	theDrivetrain->InitEncoders();
 	pid->Reset();
 	pid->Enable();
 }
@@ -29,13 +30,13 @@ bool DriveStraight::IsFinished() {
 void DriveStraight::End() {
 	// Stop PID and the wheels
 	pid->Disable();
-	theRobot->drivetrain->Drive(0, 0, 0);
+	theDrivetrain->Drive(0, 0, 0);
 }
 
 double DriveStraightPIDSource::PIDGet() {
-	return theRobot->drivetrain->GetEncoderDistance(0);
+	return theDrivetrain->GetEncoderDistance(0);
 }
 
 void DriveStraightPIDOutput::PIDWrite(double d) {
-	theRobot->drivetrain->Drive(0,d,0);
+	theDrivetrain->Drive(0,d,0);
 }
