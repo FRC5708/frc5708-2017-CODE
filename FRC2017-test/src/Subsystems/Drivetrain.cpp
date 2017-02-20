@@ -101,10 +101,34 @@ void Drivetrain::Drive(double x,double y,double z){
 }
 
 void Drivetrain::DriveWithStick(int facing){
-	float x = mainDriveStick->GetX();
-	float y = mainDriveStick->GetY();
-	float z = mainDriveStick->GetZ();
-	Drive(-x*facing,y*facing,-z);
+	int pov = mainDriveStick->GetPOV();
+	if (pov != 0) {
+
+		int sneak = .25;
+		int x = 0;
+		int y = 0;
+
+		switch(pov) {
+		case 0 : x = 0; y = sneak; break;
+		case 1 : x = sneak; y = sneak; break;
+		case 2 : x = sneak; y = 0; break;
+		case 3 : x = sneak; y = -sneak; break;
+		case 4 : x = 0; y = -sneak; break;
+		case 5 : x = -sneak; y = -sneak; break;
+		case 6 : x = -sneak; y = 0; break;
+		case 7 : x = -sneak; y = sneak; break;
+		}
+		
+		Drive(x*facing, y*facing, 0);
+		
+	}
+	else {
+
+		float x = mainDriveStick->GetX();
+		float y = mainDriveStick->GetY();
+		float z = mainDriveStick->GetZ();
+		Drive(-x*facing,y*facing,-z);
+	}
 }
 
 double frontLeftPIDSource::PIDGet() {
