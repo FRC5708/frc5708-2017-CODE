@@ -118,7 +118,7 @@ void Drivetrain::DriveWithStick(int facing){
 		case 7 : x = -sneak; y = sneak; break;
 		}
 		
-		Drive(x*facing, y*facing, 0);
+		Drive(-x*facing, y*facing, -mainDriveStick->GetZ());
 		
 	}
 	else {
