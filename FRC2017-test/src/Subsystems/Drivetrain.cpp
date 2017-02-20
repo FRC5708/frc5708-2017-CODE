@@ -1,6 +1,7 @@
 #include "Drivetrain.h"
 #include "../RobotMap.h"
 #include "WPILib.h"
+#include <vector>
 
 Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
@@ -24,6 +25,28 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     rearRightEncoder = new Encoder(6,7);
 
 
+    frontLeftController = new PIDController(4, 0, 0, new frontLeftPIDSource(),
+			new frontLeftPIDOutput());
+    rearLeftController = new PIDController(4, 0, 0, new rearLeftPIDSource(),
+    		new rearLeftPIDOutput());
+    frontRightController = new PIDController(4, 0, 0, new frontRightPIDSource(),
+    		new frontRightPIDOutput());
+    rearRightController = new PIDController(4, 0, 0, new rearRightPIDSource(),
+    		new rearRightPIDOutput());
+
+    encoders = new std::vector<Encoder*>();
+    encoders = {frontLeftEncoder, rearLeftEncoder,
+    			frontRightEncoder, rearRightEncoder};
+
+    motors = new std::vector<SpeedController*>();
+    motors = {frontLeftMotor, rearLeftMotor,
+        	  frontRightMotor, rearRightMotor};
+
+    controllers = new std::vector<PIDController*>();
+    controllers = {frontLeftController, rearLeftController,
+                   frontRightController, rearRightController};
+
+
 }
 
 void Drivetrain::InitDefaultCommand()
@@ -31,32 +54,48 @@ void Drivetrain::InitDefaultCommand()
 
 }
 
-double Drivetrain::GetEncoderSpeed(Encoder* enc){
+double Drivetrain::GetEncoderSpeed(int index){
+	Encoder *enc = encoders[index];
 	return (1/enc->GetPeriod())/9;
 }
 
-double Drivetrain::GetEncoderCount(){
-	return (frontLeftEncoder->Get()/13.521)-encoderOffset;
+double Drivetrain::GetEncoderCount(int index){
+	Encoder *enc = encoders[index];
+	return (enc->Get()/13.521)-encoderOffset;
 }
 
-double Drivetrain::GetEncoderDistance(){
-	return wheelCircumference*GetEncoderCount();
+double Drivetrain::GetEncoderDistance(int index){
+	return wheelCircumference*GetEncoderCount(index);
 }
 
 void Drivetrain::InitEncoders(){
-	encoderOffset = GetEncoderDistance();
+	encoderOffset = GetEncoderDistance(0);
+}
+
+void Drivetrain::DriveMotor(int index, double speed){
+	SpeedController *motor = motors[index];
+	motor->Set(speed);
+}
+
+std::vector<double> Drivetrain::CalculateOmegas(double x, double y, double z){
+	std::vector<double> omegas;
+	double scalar = -(1/wheelRadius);
+	omegas[0] = (y-x-(wheelLength+wheelWidth))*scalar;
+	omegas[1] = (y+x+(wheelLength+wheelWidth))*scalar;
+	omegas[2] = (y+x-(wheelLength+wheelWidth))*scalar;
+	omegas[3] = (y-x+(wheelLength+wheelWidth))*scalar;
+	return omegas;
 }
 
 
-void Drivetrain::Drive(float x,float y,float z){
-	float FL_speed = x+z+y;
-	float FR_speed = y-z-x;
-	float RR_speed = y-z+x;
-	float RL_speed = y+z-x;
-	frontLeftMotor->Set(FL_speed);
-	frontRightMotor->Set(FR_speed);
-	rearRightMotor->Set(RR_speed);
-	rearLeftMotor->Set(RL_speed);
+void Drivetrain::Drive(double x,double y,double z){
+	std::vector<double> omegas = CalculateOmegas(x,y,z);
+	for(int i = 0; i < 4; i++){
+		PIDController* c = controllers[i];
+		c->Disable();
+		c->SetSetpoint(omegas[i]);
+		c->Enable();
+	}
 }
 
 void Drivetrain::DriveWithStick(int facing){
@@ -64,4 +103,33 @@ void Drivetrain::DriveWithStick(int facing){
 	float y = mainDriveStick->GetY();
 	float z = mainDriveStick->GetZ();
 	Drive(-x*facing,y*facing,-z);
+}
+
+double frontLeftPIDSource::PIDGet() {
+	//return Robot::drivetrain->GetEncoderDistance(0);
+}
+
+void frontLeftPIDOutput::PIDWrite(double d) {
+	//Robot::drivetrain->DriveMotor(0,d);
+}
+double rearLeftPIDSource::PIDGet() {
+	//return Robot::drivetrain->GetEncoderDistance(1);
+}
+
+void rearLeftPIDOutput::PIDWrite(double d) {
+	//Robot::drivetrain->DriveMotor(1,d);
+}
+double frontRightPIDSource::PIDGet() {
+	//return Robot::drivetrain->GetEncoderDistance(2);
+}
+
+void frontRightPIDOutput::PIDWrite(double d) {
+	//Robot::drivetrain->DriveMotor(0,2);
+}
+double rearRightPIDSource::PIDGet() {
+	//return Robot::drivetrain->GetEncoderDistance(3);
+}
+
+void rearRightPIDOutput::PIDWrite(double d) {
+	//Robot::drivetrain->DriveMotor(3,d);
 }
