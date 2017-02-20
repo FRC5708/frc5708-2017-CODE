@@ -1,11 +1,11 @@
+/*
+
 #ifndef Rotate_H
 #define Rotate_H
 
 #include <Commands/CommandGroup.h>
 
-/**
- * The main Rotate command to pickup and deliver the soda to the box.
- */
+
 class Rotate: public CommandBase {
 public:
 	Rotate(double time);
@@ -18,3 +18,4 @@ public:
 };
 
 #endif  // Rotate_H
+*/

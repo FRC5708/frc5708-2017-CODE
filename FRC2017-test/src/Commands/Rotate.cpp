@@ -1,3 +1,5 @@
+/*
+
 #include "Rotate.h"
 
 #include <iostream>
@@ -45,3 +47,4 @@ void Rotate::End()
 void Rotate::Interrupted()
 {
 }
+*/
