@@ -11,7 +11,6 @@
 #include <CameraServer.h>
 #include <Joystick.h>
 
-
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/types.hpp>
 
@@ -22,6 +21,7 @@
 //#include "Commands/Autonomous.h"
 #include "Subsystems/Winch.h"
 #include "Subsystems/DriveTrain.h"
+
 
 
 // for access from static functions. ENSURE THREAD SAFETY!
@@ -119,7 +119,7 @@ public:
 					backSink.SetEnabled(true);
 				}
 			}
-			oldUsingFront = usingFrontCamera;
+			oldUsingFront = usingFront;
 			
 			
 			if (usingFront) {
