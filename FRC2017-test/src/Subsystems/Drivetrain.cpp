@@ -1,5 +1,6 @@
 #include "Drivetrain.h"
 #include "../RobotMap.h"
+#include "WPILib.h"
 
 Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
@@ -58,9 +59,9 @@ void Drivetrain::Drive(float x,float y,float z){
 	rearLeftMotor->Set(RL_speed);
 }
 
-void Drivetrain::DriveWithStick(){
+void Drivetrain::DriveWithStick(int facing){
 	float x = mainDriveStick->GetX();
 	float y = mainDriveStick->GetY();
 	float z = mainDriveStick->GetZ();
-	Drive(x,y,z);
+	Drive(-x*facing,y*facing,-z);
 }

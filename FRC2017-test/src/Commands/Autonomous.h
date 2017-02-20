@@ -6,7 +6,7 @@
 /**
  * The main autonomous command to pickup and deliver the soda to the box.
  */
-class Autonomous: public CommandBase {
+class Autonomous: public CommandGroup {
 public:
 	Autonomous();
 };
