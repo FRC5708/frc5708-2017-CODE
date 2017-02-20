@@ -26,7 +26,6 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     frontRightEncoder = new Encoder(4,5);
     rearRightEncoder = new Encoder(6,7);
 
-
     frontLeftController = new PIDController(4, 0, 0, new frontLeftPIDSource(),
 			new frontLeftPIDOutput());
     rearLeftController = new PIDController(4, 0, 0, new rearLeftPIDSource(),
@@ -82,10 +81,10 @@ void Drivetrain::DriveMotor(int index, double speed){
 std::vector<double> Drivetrain::CalculateOmegas(double x, double y, double z){
 	std::vector<double> omegas;
 	double scalar = -(1/wheelRadius);
-	omegas[0] = (y-x-(wheelLength+wheelWidth))*scalar;
-	omegas[1] = (y+x+(wheelLength+wheelWidth))*scalar;
-	omegas[2] = (y+x-(wheelLength+wheelWidth))*scalar;
-	omegas[3] = (y-x+(wheelLength+wheelWidth))*scalar;
+	omegas[0] = (y-x-(wheelLength+wheelWidth))*scalar*maxSpeed;
+	omegas[1] = (y+x+(wheelLength+wheelWidth))*scalar*maxSpeed;
+	omegas[2] = (y+x-(wheelLength+wheelWidth))*scalar*maxSpeed;
+	omegas[3] = (y-x+(wheelLength+wheelWidth))*scalar*maxSpeed;
 	return omegas;
 }
 

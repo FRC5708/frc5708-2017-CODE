@@ -24,6 +24,7 @@ private:
 	double wheelLength = 10;
 	double wheelRadius = 3;
 	double wheelCircumference = 2*wheelRadius*3.1415;
+	double maxSpeed = 100;
 
 
 	Joystick *mainDriveStick;
