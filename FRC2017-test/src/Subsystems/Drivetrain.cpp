@@ -2,9 +2,11 @@
 #include "../RobotMap.h"
 #include "WPILib.h"
 #include <vector>
+#include "Robot.cpp"
 
 Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
+	frc::GetClock();
 	const static int frontLeftChannel	= 0;
     const static int rearLeftChannel	= 1;
     const static int frontRightChannel	= 2;
@@ -106,30 +108,30 @@ void Drivetrain::DriveWithStick(int facing){
 }
 
 double frontLeftPIDSource::PIDGet() {
-	//return Robot::drivetrain->GetEncoderDistance(0);
+	return theRobot->drivetrain->GetEncoderDistance(0);
 }
 
 void frontLeftPIDOutput::PIDWrite(double d) {
-	//Robot::drivetrain->DriveMotor(0,d);
+	theRobot->drivetrain->DriveMotor(0,d);
 }
 double rearLeftPIDSource::PIDGet() {
-	//return Robot::drivetrain->GetEncoderDistance(1);
+	return theRobot->drivetrain->GetEncoderDistance(1);
 }
 
 void rearLeftPIDOutput::PIDWrite(double d) {
-	//Robot::drivetrain->DriveMotor(1,d);
+	theRobot->drivetrain->DriveMotor(1,d);
 }
 double frontRightPIDSource::PIDGet() {
-	//return Robot::drivetrain->GetEncoderDistance(2);
+	return theRobot->drivetrain->GetEncoderDistance(2);
 }
 
 void frontRightPIDOutput::PIDWrite(double d) {
-	//Robot::drivetrain->DriveMotor(0,2);
+	theRobot->drivetrain->DriveMotor(0,2);
 }
 double rearRightPIDSource::PIDGet() {
-	//return Robot::drivetrain->GetEncoderDistance(3);
+	return theRobot->drivetrain->GetEncoderDistance(3);
 }
 
 void rearRightPIDOutput::PIDWrite(double d) {
-	//Robot::drivetrain->DriveMotor(3,d);
+	theRobot->Robot::drivetrain->DriveMotor(3,d);
 }

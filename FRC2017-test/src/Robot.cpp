@@ -31,8 +31,8 @@ Robot* theRobot;
 class Robot: public frc::IterativeRobot {
 public:
 	
-	frc::Joystick* stick;
-	Drivetrain *mainDrivetrain;
+	Joystick* stick;
+	Drivetrain *drivetrain;
 	Winch *winch;
 	bool driveInverted = false;
 	
@@ -42,12 +42,8 @@ public:
 		theRobot = this;
 		
 		//CommandBase::init();
-		mainDrivetrain = new Drivetrain();
+		drivetrain = new Drivetrain();
 		winch = new Winch();
-		//chooser = new SendableChooser();
-		//chooser->AddDefault("Default Auto", new Autonomous());
-		//chooser->AddObject("My Auto", new MyAutoCommand());
-		//SmartDashboard::PutData("Auto Modes", chooser);
 
 		
 		stick = new frc::Joystick(0);
@@ -83,8 +79,7 @@ public:
 		 else {
 			autonomousCommand.reset(new ExampleCommand());
 		 } */
-		
-		autonomousCommand.reset(chooser.GetSelected());
+
 		
 		if (autonomousCommand.get() != nullptr) {
 			autonomousCommand->Start();
@@ -169,9 +164,9 @@ public:
 		driveInverted = usingFrontCamera;
 
 		if (driveInverted){
-			mainDrivetrain->DriveWithStick(-1);
+			drivetrain->DriveWithStick(-1);
 		}else{
-			mainDrivetrain->DriveWithStick(1);
+			drivetrain->DriveWithStick(1);
 		}
 
 		winch->DriveWithJoystick();
@@ -197,7 +192,6 @@ public:
 	
 private:
 	std::unique_ptr<frc::Command> autonomousCommand;
-	frc::SendableChooser<frc::Command*> chooser;
 };
 
 
