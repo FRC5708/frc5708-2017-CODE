@@ -17,9 +17,11 @@ private:
 	SpeedController *frontRightMotor;
 	SpeedController *rearRightMotor;
 
+
+	//all measurements in inches.
 	double encoderOffset = 0;
-	double wheelWidth = 0;
-	double wheelLength = 0;
+	double wheelWidth = 14.5;
+	double wheelLength = 10;
 	double wheelRadius = 3;
 	double wheelCircumference = 2*wheelRadius*3.1415;
 
