@@ -16,7 +16,7 @@ DriveStraight::DriveStraight(double distance) {
 // Called just before this Command runs the first time
 void DriveStraight::Initialize() {
 	// Get everything in a safe starting state.
-	theDrivetrain->InitEncoders();
+	theDrivetrain->ResetDistances();
 	pid->Reset();
 	pid->Enable();
 }
@@ -34,7 +34,7 @@ void DriveStraight::End() {
 }
 
 double DriveStraightPIDSource::PIDGet() {
-	return theDrivetrain->GetEncoderDistance(0);
+	return theDrivetrain->GetEncoderDistance();
 }
 
 void DriveStraightPIDOutput::PIDWrite(double d) {
