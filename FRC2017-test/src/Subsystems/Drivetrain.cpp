@@ -1,12 +1,13 @@
 #include "Drivetrain.h"
 #include "../RobotMap.h"
+#include "WPIlib.h"
 
 Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
-	const static int frontLeftChannel	= 0;
-    const static int rearLeftChannel	= 1;
-    const static int frontRightChannel	= 2;
-    const static int rearRightChannel	= 3;
+	const static int frontLeftChannel	= 9;
+    const static int rearLeftChannel	= 5;
+    const static int frontRightChannel	= 8;
+    const static int rearRightChannel	= 7;
 
     const static int joystickChannel	= 0;
 
@@ -52,15 +53,15 @@ void Drivetrain::Drive(float x,float y,float z){
 	float FR_speed = y-z-x;
 	float RR_speed = y-z+x;
 	float RL_speed = y+z-x;
-	frontLeftMotor->Set(FL_speed);
+	frontLeftMotor->Set(-FL_speed);
 	frontRightMotor->Set(FR_speed);
 	rearRightMotor->Set(RR_speed);
-	rearLeftMotor->Set(RL_speed);
+	rearLeftMotor->Set(-RL_speed);
 }
 
-void Drivetrain::DriveWithStick(){
+void Drivetrain::DriveWithStick(int facing){
 	float x = mainDriveStick->GetX();
 	float y = mainDriveStick->GetY();
 	float z = mainDriveStick->GetZ();
-	Drive(x,y,z);
+	Drive(-x,y*facing,-z);
 }

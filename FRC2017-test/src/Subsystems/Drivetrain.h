@@ -33,7 +33,7 @@ public:
 	double GetEncoderCount();
 	double GetEncoderDistance();
 	void InitEncoders();
-	void DriveWithStick();
+	void DriveWithStick(int facing);
 };
 
 #endif
