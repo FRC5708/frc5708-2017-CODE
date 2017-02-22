@@ -13,15 +13,28 @@ Wheel::Wheel(int pin, std::vector<int> encoderPins) {
 }
 
 double Wheel::GetSpeed(){
-	return 2/(encoder->GetPeriod()/9);
+	return (1/encoder->GetPeriod())/9;
 }
 
 void Wheel::PowerOut(double power){
 	motor->Set(power);
 }
 
+void Wheel::PrintSpeed(llvm::StringRef name){
+	SmartDashboard::PutNumber(name, GetSpeed());
+}
+
 double Wheel::GetCorrection(){
-	double error = targetSpeed - GetSpeed();
+	double error;
+	/*if (GetSpeed()-targetSpeed != 0){
+		if (GetSpeed()-targetSpeed > 0){
+			error = -1;
+		}else{
+			error = 1;
+		}
+	}*/
+
+	error = targetSpeed - GetSpeed();
 	return error * CORRECTION_CONSTANT;
 }
 
@@ -33,6 +46,8 @@ void Wheel::ResetDistanceTravelled(){
 	distanceOffset = GetDistanceTravelled();
 }
 void Wheel::SetTargetSpeed(double speed){
+
+	if (targetSpeed != 0) power *= speed / targetSpeed;
 	targetSpeed = speed;
 }
 

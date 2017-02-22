@@ -59,6 +59,11 @@ void Drivetrain::Drive(float x,float y,float z){
 	frontRightWheel->UpdateSpeed();
 	rearRightWheel->UpdateSpeed();
 	rearLeftWheel->UpdateSpeed();
+
+	frontLeftWheel->PrintSpeed("FL");
+	frontLeftWheel->PrintSpeed("RL");
+	frontLeftWheel->PrintSpeed("FR");
+	frontLeftWheel->PrintSpeed("RR");
 }
 
 void Drivetrain::DriveWithStick(int facing){
