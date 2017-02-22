@@ -24,7 +24,7 @@ private:
 	double wheelLength = 10;
 	double wheelRadius = 3;
 	double wheelCircumference = 2*wheelRadius*3.1415;
-	double maxSpeed = 100;
+	double MAX_SPEED = 1;
 
 
 	Joystick *mainDriveStick;
@@ -55,51 +55,52 @@ public:
 	void InitEncoders();
 	void DriveMotor(int index, double speed);
 	void DriveWithStick(int facing);
+	void InitPids();
 };
 
 class frontLeftPIDSource: public PIDSource {
 public:
 	virtual ~frontLeftPIDSource() = default;
-	double PIDGet() override;
+	virtual double PIDGet() override;
 };
 
 class frontLeftPIDOutput: public PIDOutput {
 public:
 	virtual ~frontLeftPIDOutput() = default;
-	void PIDWrite(double d) override;
+	virtual void PIDWrite(double d) override;
 };
 class rearLeftPIDSource: public PIDSource {
 public:
 	virtual ~rearLeftPIDSource() = default;
-	double PIDGet() override;
+	virtual double PIDGet() override;
 };
 
 class rearLeftPIDOutput: public PIDOutput {
 public:
 	virtual ~rearLeftPIDOutput() = default;
-	void PIDWrite(double d) override;
+	virtual void PIDWrite(double d) override;
 };
 class frontRightPIDSource: public PIDSource {
 public:
 	virtual ~frontRightPIDSource() = default;
-	double PIDGet() override;
+	virtual double PIDGet() override;
 };
 
 class frontRightPIDOutput: public PIDOutput {
 public:
 	virtual ~frontRightPIDOutput() = default;
-	void PIDWrite(double d) override;
+	virtual void PIDWrite(double d) override;
 };
 class rearRightPIDSource: public PIDSource {
 public:
 	virtual ~rearRightPIDSource() = default;
-	double PIDGet() override;
+	virtual double PIDGet() override;
 };
 
 class rearRightPIDOutput: public PIDOutput {
 public:
 	virtual ~rearRightPIDOutput() = default;
-	void PIDWrite(double d) override;
+	virtual void PIDWrite(double d) override;
 };
 
 #endif

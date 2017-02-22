@@ -7,10 +7,10 @@
 Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
 	frc::GetClock();
-	const static int frontLeftChannel	= 0;
-    const static int rearLeftChannel	= 1;
-    const static int frontRightChannel	= 2;
-    const static int rearRightChannel	= 3;
+	const static int frontLeftChannel	= 9;
+    const static int rearLeftChannel	= 5;
+    const static int frontRightChannel	= 8;
+    const static int rearRightChannel	= 7;
 
     const static int joystickChannel	= 0;
 
@@ -26,28 +26,39 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     frontRightEncoder = new Encoder(4,5);
     rearRightEncoder = new Encoder(6,7);
 
-    frontLeftController = new PIDController(1, 0, 2, new frontLeftPIDSource(),
+    double p = 0.1;
+    double i = 0.001;
+    double d = 0;
+
+    frontLeftController = new PIDController(p, i, d, new frontLeftPIDSource(),
 			new frontLeftPIDOutput());
-    rearLeftController = new PIDController(1, 0, 2, new rearLeftPIDSource(),
+    rearLeftController = new PIDController(p, i, d, new rearLeftPIDSource(),
     		new rearLeftPIDOutput());
-    frontRightController = new PIDController(1, 0, 1, new frontRightPIDSource(),
+    frontRightController = new PIDController(p, i, d, new frontRightPIDSource(),
     		new frontRightPIDOutput());
-    rearRightController = new PIDController(1, 0, 2, new rearRightPIDSource(),
+    rearRightController = new PIDController(p, i, d, new rearRightPIDSource(),
     		new rearRightPIDOutput());
 
     encoders = std::vector<Encoder*>();
     encoders = {frontLeftEncoder, rearLeftEncoder,
     			frontRightEncoder, rearRightEncoder};
 
-    motors = std::vector<SpeedController*>();
+    //motors = std::vector<SpeedController*>();
     motors = {frontLeftMotor, rearLeftMotor,
         	  frontRightMotor, rearRightMotor};
 
     controllers = std::vector<PIDController*>();
     controllers = {frontLeftController, rearLeftController,
                    frontRightController, rearRightController};
+}
 
-
+void Drivetrain::InitPids() {
+	for (int i = 0; i < 4; i++){
+	    	PIDController *p = controllers[i];
+	    	p->SetAbsoluteTolerance(0.01);
+	    	p->Reset();
+	    	p->Enable();
+	    }
 }
 
 void Drivetrain::InitDefaultCommand()
@@ -57,7 +68,12 @@ void Drivetrain::InitDefaultCommand()
 
 double Drivetrain::GetEncoderSpeed(int index){
 	Encoder *enc = encoders[index];
-	return (1/enc->GetPeriod())/9;
+	char* string = (char*)malloc(12);
+	sprintf(string, "encoder %d:", index);
+	double toReturn = (1/enc->GetPeriod())/9;
+	SmartDashboard::PutNumber(string, toReturn);
+	return toReturn;
+	return 0;
 }
 
 double Drivetrain::GetEncoderCount(int index){
@@ -81,10 +97,12 @@ void Drivetrain::DriveMotor(int index, double speed){
 std::vector<double> Drivetrain::CalculateOmegas(double x, double y, double z){
 	std::vector<double> omegas;
 	double scalar = -(1/wheelRadius);
-	omegas[0] = (y-x-(wheelLength+wheelWidth))*scalar*maxSpeed;
-	omegas[1] = (y+x+(wheelLength+wheelWidth))*scalar*maxSpeed;
-	omegas[2] = (y+x-(wheelLength+wheelWidth))*scalar*maxSpeed;
-	omegas[3] = (y-x+(wheelLength+wheelWidth))*scalar*maxSpeed;
+	omegas = {
+		(x+z+y)*MAX_SPEED,
+		(y+z-x)*MAX_SPEED,
+		(y-z-x)*MAX_SPEED,
+		(y-z+x)*MAX_SPEED
+	};
 	return omegas;
 }
 
@@ -93,9 +111,7 @@ void Drivetrain::Drive(double x,double y,double z){
 	std::vector<double> omegas = CalculateOmegas(x,y,z);
 	for(int i = 0; i < 4; i++){
 		PIDController* c = controllers[i];
-		c->Disable();
 		c->SetSetpoint(omegas[i]);
-		c->Enable();
 	}
 }
 
@@ -127,34 +143,41 @@ void Drivetrain::DriveWithStick(int facing){
 		float y = mainDriveStick->GetY();
 		float z = mainDriveStick->GetZ();
 		Drive(-x*facing,y*facing,-z);
+		SmartDashboard::PutNumber("joystickX",x);
+		SmartDashboard::PutNumber("joystickY",y);
+		SmartDashboard::PutNumber("joystickZ",z);
 	//}
 }
 
 double frontLeftPIDSource::PIDGet() {
-	return theDrivetrain->GetEncoderDistance(0);
+	return theDrivetrain->GetEncoderSpeed(0);
 }
 
 void frontLeftPIDOutput::PIDWrite(double d) {
 	theDrivetrain->DriveMotor(0,d);
+	SmartDashboard::PutNumber("FLout",d);
 }
 double rearLeftPIDSource::PIDGet() {
-	return theDrivetrain->GetEncoderDistance(1);
+	return theDrivetrain->GetEncoderSpeed(1);
 }
 
 void rearLeftPIDOutput::PIDWrite(double d) {
 	theDrivetrain->DriveMotor(1,d);
+	SmartDashboard::PutNumber("RLout",d);
 }
 double frontRightPIDSource::PIDGet() {
-	return theDrivetrain->GetEncoderDistance(2);
+	return theDrivetrain->GetEncoderSpeed(2);
 }
 
 void frontRightPIDOutput::PIDWrite(double d) {
-	theDrivetrain->DriveMotor(0,2);
+	theDrivetrain->DriveMotor(2,d);
+	SmartDashboard::PutNumber("FRout",d);
 }
 double rearRightPIDSource::PIDGet() {
-	return theDrivetrain->GetEncoderDistance(3);
+	return theDrivetrain->GetEncoderSpeed(3);
 }
 
 void rearRightPIDOutput::PIDWrite(double d) {
 	theDrivetrain->DriveMotor(3,d);
+	SmartDashboard::PutNumber("RRout",d);
 }

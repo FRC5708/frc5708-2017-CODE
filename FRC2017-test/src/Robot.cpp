@@ -42,6 +42,7 @@ public:
 		//CommandBase::init();
 		drivetrain = new Drivetrain();
 		theDrivetrain = drivetrain;
+		drivetrain->InitPids();
 		winch = new Winch();
 
 		
