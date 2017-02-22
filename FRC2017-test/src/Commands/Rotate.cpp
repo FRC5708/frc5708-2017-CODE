@@ -16,7 +16,7 @@ Rotate::Rotate(double time)
 // Called just before this Command runs the first time
 void Rotate::Initialize()
 {
-	theDrivetrain->ResetDistances();
+	theDrivetrain->InitEncoders();
 }
 
 // Called repeatedly when this Command is scheduled to run

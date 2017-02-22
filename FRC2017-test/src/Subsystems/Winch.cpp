@@ -4,8 +4,8 @@
 
 Winch::Winch() : Subsystem("Winch") {
 
-	const static int leftChannel	= 2;
-    const static int rightChannel	= 1;
+	const static int leftChannel	= 4;
+    const static int rightChannel	= 5;
 
     const static int joystickChannel	= 0;
 
@@ -31,8 +31,8 @@ double Winch::GetEncoderSpeed(Encoder* enc){
 
 
 void Winch::Drive(double speed){
-	leftMotor->Set(-speed*.75);
-	rightMotor->Set(speed*.75);
+	leftMotor->Set(speed);
+	rightMotor->Set(speed);
 }
 
 void Winch::DriveWithJoystick(){
