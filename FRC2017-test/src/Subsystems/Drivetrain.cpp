@@ -26,13 +26,13 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     frontRightEncoder = new Encoder(4,5);
     rearRightEncoder = new Encoder(6,7);
 
-    frontLeftController = new PIDController(4, 0, 0, new frontLeftPIDSource(),
+    frontLeftController = new PIDController(1, 0, 2, new frontLeftPIDSource(),
 			new frontLeftPIDOutput());
-    rearLeftController = new PIDController(4, 0, 0, new rearLeftPIDSource(),
+    rearLeftController = new PIDController(1, 0, 2, new rearLeftPIDSource(),
     		new rearLeftPIDOutput());
-    frontRightController = new PIDController(4, 0, 0, new frontRightPIDSource(),
+    frontRightController = new PIDController(1, 0, 1, new frontRightPIDSource(),
     		new frontRightPIDOutput());
-    rearRightController = new PIDController(4, 0, 0, new rearRightPIDSource(),
+    rearRightController = new PIDController(1, 0, 2, new rearRightPIDSource(),
     		new rearRightPIDOutput());
 
     encoders = std::vector<Encoder*>();
@@ -100,7 +100,7 @@ void Drivetrain::Drive(double x,double y,double z){
 }
 
 void Drivetrain::DriveWithStick(int facing){
-	int pov = mainDriveStick->GetPOV();
+	/*int pov = mainDriveStick->GetPOV();
 	if (pov != 0) {
 
 		int sneak = .25;
@@ -121,13 +121,13 @@ void Drivetrain::DriveWithStick(int facing){
 		Drive(-x*facing, y*facing, -mainDriveStick->GetZ());
 		
 	}
-	else {
+	else {*/
 
 		float x = mainDriveStick->GetX();
 		float y = mainDriveStick->GetY();
 		float z = mainDriveStick->GetZ();
 		Drive(-x*facing,y*facing,-z);
-	}
+	//}
 }
 
 double frontLeftPIDSource::PIDGet() {
