@@ -57,7 +57,7 @@ public:
 	void DriveWithStick(int facing);
 	void InitPids();
 };
-
+/*
 class frontLeftPIDSource: public PIDSource {
 public:
 	virtual ~frontLeftPIDSource() = default;
@@ -102,5 +102,5 @@ public:
 	virtual ~rearRightPIDOutput() = default;
 	virtual void PIDWrite(double d) override;
 };
-
+*/
 #endif

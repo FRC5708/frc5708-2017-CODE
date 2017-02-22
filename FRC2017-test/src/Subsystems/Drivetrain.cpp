@@ -30,14 +30,14 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     double i = 0.001;
     double d = 0;
 
-    frontLeftController = new PIDController(p, i, d, new frontLeftPIDSource(),
-			new frontLeftPIDOutput());
-    rearLeftController = new PIDController(p, i, d, new rearLeftPIDSource(),
-    		new rearLeftPIDOutput());
-    frontRightController = new PIDController(p, i, d, new frontRightPIDSource(),
-    		new frontRightPIDOutput());
-    rearRightController = new PIDController(p, i, d, new rearRightPIDSource(),
-    		new rearRightPIDOutput());
+    frontLeftController = new PIDController(p, i, d, frontLeftEncoder,
+			frontLeftMotor);
+    rearLeftController = new PIDController(p, i, d, rearLeftEncoder,
+    		rearLeftMotor);
+    frontRightController = new PIDController(p, i, d, frontRightEncoder,
+    		frontRightMotor);
+    rearRightController = new PIDController(p, i, d, rearRightEncoder,
+    		rearRightMotor);
 
     encoders = std::vector<Encoder*>();
     encoders = {frontLeftEncoder, rearLeftEncoder,
@@ -50,6 +50,12 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     controllers = std::vector<PIDController*>();
     controllers = {frontLeftController, rearLeftController,
                    frontRightController, rearRightController};
+    
+    FOREACH(encoders, i) {
+    	//WILL NEED TO GET ACTUAL VALUE OF THE ENCODERS WE'RE USING! 
+    	(*i)->SetDistancePerPulse(1);
+    	(*i)->SetPIDSourceType(PIDSourceType::kRate);
+    }
 }
 
 void Drivetrain::InitPids() {
@@ -108,6 +114,15 @@ std::vector<double> Drivetrain::CalculateOmegas(double x, double y, double z){
 
 
 void Drivetrain::Drive(double x,double y,double z){
+	//Inevitably, we will want this
+	for (int i = 0; i != 4; ++i) {
+		Encoder *enc = encoders[i];
+			char* string = (char*)malloc(12);
+			sprintf(string, "encoder %d:", i);
+			double rate = enc->GetRate();
+			SmartDashboard::PutNumber(string, rate);
+	}
+	
 	std::vector<double> omegas = CalculateOmegas(x,y,z);
 	for(int i = 0; i < 4; i++){
 		PIDController* c = controllers[i];
@@ -148,7 +163,7 @@ void Drivetrain::DriveWithStick(int facing){
 		SmartDashboard::PutNumber("joystickZ",z);
 	//}
 }
-
+/*
 double frontLeftPIDSource::PIDGet() {
 	return theDrivetrain->GetEncoderSpeed(0);
 }
@@ -181,3 +196,4 @@ void rearRightPIDOutput::PIDWrite(double d) {
 	theDrivetrain->DriveMotor(3,d);
 	SmartDashboard::PutNumber("RRout",d);
 }
+*/
