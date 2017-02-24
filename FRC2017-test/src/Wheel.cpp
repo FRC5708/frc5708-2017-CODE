@@ -5,15 +5,18 @@
  *      Author: benw
  */
 
-#include <Wheel.h>
+#include "Wheel.h"
+#include "Drivetrain.h"
 
+
+//Currently will set voltage when target speed is set, then adjust by small amounts.
 Wheel::Wheel(int pin, std::vector<int> encoderPins) {
 	motor = new Victor(pin);
 	encoder = new Encoder(encoderPins[0], encoderPins[1]);
 }
 
 double Wheel::GetSpeed(){
-	return (1/encoder->GetPeriod())/9;
+	return encoder->GetRate();
 }
 
 void Wheel::PowerOut(double power){
@@ -26,16 +29,18 @@ void Wheel::PrintSpeed(llvm::StringRef name){
 
 double Wheel::GetCorrection(){
 	double error;
-	/*if (GetSpeed()-targetSpeed != 0){
+	if (GetSpeed()-targetSpeed != 0){
 		if (GetSpeed()-targetSpeed > 0){
 			error = -1;
 		}else{
 			error = 1;
 		}
-	}*/
+	}
 
-	error = targetSpeed - GetSpeed();
-	return error * CORRECTION_CONSTANT;
+	//error = targetSpeed - GetSpeed();
+	//return error * CORRECTION_CONSTANT;
+	
+	return error * (power * CORRECTION_CONSTANT);
 }
 
 double Wheel::GetDistanceTravelled(){
@@ -47,7 +52,8 @@ void Wheel::ResetDistanceTravelled(){
 }
 void Wheel::SetTargetSpeed(double speed){
 
-	if (targetSpeed != 0) power *= speed / targetSpeed;
+	if (targetSpeed != 0) power *= (speed / targetSpeed);
+	else power = speed / Drivetrain::TOP_SPEED;
 	targetSpeed = speed;
 }
 

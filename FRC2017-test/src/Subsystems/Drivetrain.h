@@ -15,7 +15,7 @@ private:
 	Wheel *frontRightWheel;
 	Wheel *rearRightWheel;
 
-	const double TOP_SPEED = 100;
+	const static double TOP_SPEED = 100;
 
 
 	Joystick *mainDriveStick;

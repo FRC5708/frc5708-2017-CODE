@@ -24,7 +24,7 @@ private:
 	SpeedController* motor;
 	double distanceOffset = 0;
 	const double CIRCUMFERENCE = 6*3.14;
-	const double CORRECTION_CONSTANT = .001;
+	const double CORRECTION_CONSTANT = .005;
 	bool enabled = true;
 	double targetSpeed = 0;
 	double power = 0;
