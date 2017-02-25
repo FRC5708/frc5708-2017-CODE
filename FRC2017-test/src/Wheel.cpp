@@ -27,20 +27,25 @@ void Wheel::PrintSpeed(llvm::StringRef name){
 	SmartDashboard::PutNumber(name, GetSpeed());
 }
 
-double Wheel::GetCorrection(){
-	double error = 0;
-	if (GetSpeed()-targetSpeed != 0){
-		if (GetSpeed()-targetSpeed > 0){
-			error = -1;
-		}else {
-			error = 1;
-		}
-	}
+double PROPORTIONAL_TOLERANCE = 0.5;
 
+double Wheel::GetCorrection(){
+	double correction = 0;
+	double speed = GetSpeed();
+	
+	// actually the - of the error.
+	double error = speed - targetSpeed;
+	
+	if (abs(error) > PROPORTIONAL_TOLERANCE) {
+		correction = (error > 0) ? 1 : -1;
+	}
+	else {
+		correction = error / PROPORTIONAL_TOLERANCE;
+	}
 	//error = targetSpeed - GetSpeed();
 	//return error * CORRECTION_CONSTANT;
 	
-	return error * (power * CORRECTION_CONSTANT);
+	return correction * (power * CORRECTION_CONSTANT);
 }
 
 double Wheel::GetDistanceTravelled(){
