@@ -24,10 +24,11 @@ private:
 	SpeedController* motor;
 	double distanceOffset = 0;
 	const double CIRCUMFERENCE = 6*3.14;
-	const double CORRECTION_CONSTANT = .01;
+	const double CORRECTION_CONSTANT = .1;
 	bool enabled = true;
 	double targetSpeed = 0;
 	double power = 0;
+	int motorNum;
 
 	double GetSpeed();
 	double GetCorrection();

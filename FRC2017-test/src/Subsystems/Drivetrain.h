@@ -25,7 +25,7 @@ public:
 	void ResetDistances();
 	void DriveWithStick(int facing);
 
-	constexpr static double TOP_SPEED = 100;
-};
 
+};
+const double TOP_SPEED = 1000;
 #endif
