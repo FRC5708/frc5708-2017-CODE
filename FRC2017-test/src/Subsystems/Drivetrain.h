@@ -15,8 +15,6 @@ private:
 	Wheel *frontRightWheel;
 	Wheel *rearRightWheel;
 
-	const static double TOP_SPEED = 100;
-
 
 	Joystick *mainDriveStick;
 
@@ -26,6 +24,8 @@ public:
 	double GetEncoderDistance();
 	void ResetDistances();
 	void DriveWithStick(int facing);
+
+	constexpr static double TOP_SPEED = 100;
 };
 
 #endif

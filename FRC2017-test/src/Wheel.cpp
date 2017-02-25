@@ -6,7 +6,7 @@
  */
 
 #include "Wheel.h"
-#include "Drivetrain.h"
+#include "Subsystems/Drivetrain.h"
 
 
 //Currently will set voltage when target speed is set, then adjust by small amounts.
@@ -28,11 +28,11 @@ void Wheel::PrintSpeed(llvm::StringRef name){
 }
 
 double Wheel::GetCorrection(){
-	double error;
+	double error = 0;
 	if (GetSpeed()-targetSpeed != 0){
 		if (GetSpeed()-targetSpeed > 0){
 			error = -1;
-		}else{
+		}else {
 			error = 1;
 		}
 	}
