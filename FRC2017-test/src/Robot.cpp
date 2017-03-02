@@ -19,6 +19,8 @@
 #include "CommandBase.h"
 #include "Subsystems/Winch.h"
 #include "Globals.h"
+#include "AutonState.h"
+#include "AutonState.cpp"
 
 
 
@@ -33,6 +35,10 @@ public:
 	Drivetrain *drivetrain;
 	Winch *winch;
 	bool driveInverted = false;
+	BasicState* driveStraight = new BasicState(new DriveStraight(100), nullptr);
+	BasicState* rotate = new BasicState(new Rotate(100), driveStraight);
+	BasicState* initState = driveStraight;
+	BasicState* AutonState;
 	
 	//std::shared_ptr<Drivetrain> Robot::drivetrain = std::make_shared<Drivetrain>();
 
@@ -71,27 +77,17 @@ public:
 	
 
 	void AutonomousInit() override {
-		/* std::string autoSelected = frc::SmartDashboard::GetString("Auto Selector", "Default");
-		 if (autoSelected == "My Auto") {
-			autonomousCommand.reset(new MyAutoCommand());
-		 }
-		 else {
-			autonomousCommand.reset(new ExampleCommand());
-		 } */
-
-		
-		if (autonomousCommand.get() != nullptr) {
-			autonomousCommand->Start();
-		}
+		AutonState = initState;
 	}
 	
 	void AutonomousPeriodic() override {
+		if(AutonState != nullptr) AutonState = AutonState->update();
 		frc::Scheduler::GetInstance()->Run();
 	}
 	
 	void TeleopInit() override {
-		if (autonomousCommand != nullptr) {
-			autonomousCommand->Cancel();
+		if (AutonState != nullptr) {
+			AutonState->StopState();
 		}
 	}
 	
