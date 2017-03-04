@@ -1,6 +1,12 @@
+#include <BasicState.h>
 #include <memory>
 #include <vector>
 #include <thread>
+#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <string.h>
 
 #include <Commands/Command.h>
 #include <Commands/Scheduler.h>
@@ -13,14 +19,15 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/types.hpp>
-#include <Subsystems/Drivetrain.h>
-#include <Subsystems/Drivetrain.h>
+#include "Subsystems/Drivetrain.h"
 #include "WPILib.h"
 #include "CommandBase.h"
 #include "Subsystems/Winch.h"
 #include "Globals.h"
-#include "AutonState.h"
-#include "AutonState.cpp"
+#include "TCPCLIENT.h"
+#include "BasicState.h"
+#include "Commands/DriveStraight.h"
+#include "Commands/Rotate.h"
 
 
 
@@ -34,21 +41,30 @@ public:
 	Joystick* stick;
 	Drivetrain *drivetrain;
 	Winch *winch;
+
 	bool driveInverted = false;
-	BasicState* driveStraight = new BasicState(new DriveStraight(100), nullptr);
-	BasicState* rotate = new BasicState(new Rotate(100), driveStraight);
-	BasicState* initState = driveStraight;
+
+	BasicState* driveStraight;
+	BasicState* rotate;
+	BasicState* initState;
 	BasicState* AutonState;
 	
-	//std::shared_ptr<Drivetrain> Robot::drivetrain = std::make_shared<Drivetrain>();
+	TcpClient* client;
+	std::vector<double> distances;
+
 
 	void RobotInit() override {
 		theRobot = this;
 		
-		//CommandBase::init();
 		drivetrain = new Drivetrain();
 		theDrivetrain = drivetrain;
 		winch = new Winch();
+
+		driveStraight = new BasicState(new DriveStraight(100), nullptr);
+		rotate = new BasicState(new Rotate(100), driveStraight);
+		initState = driveStraight;
+		client = new TcpClient();
+		distances = std::vector<double>(2);
 
 		
 		stick = new frc::Joystick(0);
@@ -63,6 +79,9 @@ public:
 		std::thread cameraThreadObj(cameraThread);
 		cameraThreadObj.detach();
 		
+		std::thread INetThreadObj(INetThread);
+		INetThreadObj.detach();
+
 		printf("initialized robot");
 	}
 	
@@ -91,6 +110,25 @@ public:
 		}
 	}
 	
+	static void INetThread(){
+		TcpClient* _client = theRobot->client;
+		_client->conn("127.0.0.1",1337);
+		string data;
+		int pos;
+		while (true){
+			data = _client->receive(16);
+			pos = data.find(" ");
+			double width = std::stod(data.substr(0, pos));
+			double height = std::stod(data.substr(pos+1));
+
+			theRobot->distances = {width, height};
+		}
+	}
+
+	void SendDistanceRequest(){
+		client->sendData("distances please!");
+	}
+
 	
 	static void cameraThread() {
 		
