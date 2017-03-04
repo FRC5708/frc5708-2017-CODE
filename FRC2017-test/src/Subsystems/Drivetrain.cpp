@@ -22,6 +22,9 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     rearLeftWheel = new  Wheel(rearLeftChannel, rearLeftEnc);
     frontRightWheel = new Wheel(frontRightChannel, frontRightEnc);
     rearRightWheel = new Wheel(rearRightChannel, rearRightEnc);
+    
+    robotDrive = new frc::RobotDrive { frontLeftChannel, rearLeftChannel,
+    			frontRightChannel, rearRightChannel };
 
 
 }
@@ -45,7 +48,7 @@ void Drivetrain::ResetDistances(){
 
 
 void Drivetrain::Drive(float x,float y,float z){
-	float FL_speed = (x+z+y) * TOP_SPEED;
+	/*float FL_speed = (x+z+y) * TOP_SPEED;
 	float FR_speed = (y-z-x) * TOP_SPEED;
 	float RR_speed = (y-z+x) * TOP_SPEED;
 	float RL_speed = (y+z-x) * TOP_SPEED;
@@ -63,7 +66,9 @@ void Drivetrain::Drive(float x,float y,float z){
 	frontLeftWheel->PrintSpeed("FL");
 	frontLeftWheel->PrintSpeed("RL");
 	frontLeftWheel->PrintSpeed("FR");
-	frontLeftWheel->PrintSpeed("RR");
+	frontLeftWheel->PrintSpeed("RR");*/
+	
+	robotDrive->MecanumDrive_Cartesian(x, y, z);
 }
 
 void Drivetrain::DriveWithStick(int facing){
