@@ -24,7 +24,6 @@
 #include "CommandBase.h"
 #include "Subsystems/Winch.h"
 #include "Globals.h"
-#include "TCPCLIENT.h"
 #include "BasicState.h"
 #include "Commands/DriveStraight.h"
 #include "Commands/Rotate.h"
@@ -49,7 +48,8 @@ public:
 	BasicState* initState;
 	BasicState* AutonState;
 	
-	TcpClient* client;
+	static std::shared_ptr<NetworkTable> table;
+
 	std::vector<double> distances;
 
 
@@ -63,7 +63,7 @@ public:
 		driveStraight = new BasicState(new DriveStraight(100), nullptr);
 		rotate = new BasicState(new Rotate(100), driveStraight);
 		initState = driveStraight;
-		client = new TcpClient();
+		table = NetworkTable::GetTable("Vision");
 		distances = std::vector<double>(2);
 
 		
@@ -79,8 +79,6 @@ public:
 		std::thread cameraThreadObj(cameraThread);
 		cameraThreadObj.detach();
 		
-		std::thread INetThreadObj(INetThread);
-		INetThreadObj.detach();
 
 		printf("initialized robot");
 	}
@@ -108,25 +106,6 @@ public:
 		if (AutonState != nullptr) {
 			AutonState->StopState();
 		}
-	}
-	
-	static void INetThread(){
-		TcpClient* _client = theRobot->client;
-		_client->conn("127.0.0.1",1337);
-		string data;
-		int pos;
-		while (true){
-			data = _client->receive(16);
-			pos = data.find(" ");
-			double width = std::stod(data.substr(0, pos));
-			double height = std::stod(data.substr(pos+1));
-
-			theRobot->distances = {width, height};
-		}
-	}
-
-	void SendDistanceRequest(){
-		client->sendData("distances please!");
 	}
 
 	
