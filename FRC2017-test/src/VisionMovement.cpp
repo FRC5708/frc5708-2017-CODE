@@ -1,10 +1,6 @@
 #include "VisionMovement.hpp"
 
 
-
-const double STRAFE_TOLERANCE = 0.5;
-const double STRAFE_CORRECTION_TOLERANCE = 0.1;
-
 const double CORRECTION_MULTIPLIER = 0.2;
 
 VisionMovement::VisionMovement(NetworkTable* table, Drivetrain* drivetrain) {
