@@ -27,6 +27,7 @@
 #include "BasicState.h"
 #include "Commands/DriveStraight.h"
 #include "Commands/Rotate.h"
+#include "VisionMovement.hpp"
 
 
 
@@ -48,9 +49,11 @@ public:
 	BasicState* initState;
 	BasicState* AutonState;
 	
-	static std::shared_ptr<NetworkTable> table;
+	std::shared_ptr<NetworkTable> table;
 
 	std::vector<double> distances;
+	
+	VisionMovement* vision = NULL;
 
 
 	void RobotInit() override {
@@ -100,6 +103,7 @@ public:
 	void AutonomousPeriodic() override {
 		if(AutonState != nullptr) AutonState = AutonState->update();
 		frc::Scheduler::GetInstance()->Run();
+		if (vision) vision->periodic();
 	}
 	
 	void TeleopInit() override {
@@ -108,6 +112,11 @@ public:
 		}
 	}
 
+	void activateVision() {
+		// VisionMovement::periodic() is always called.
+		if (vision) delete vision;
+		vision = new VisionMovement(&*table, drivetrain);
+	}
 	
 	static void cameraThread() {
 		
@@ -187,6 +196,8 @@ public:
 		frc::Scheduler::GetInstance()->Run();
 		
 		if (wasButtonJustPressed(3)) toggleCamera();
+		if (wasButtonJustPressed(6)) activateVision();
+		if (vision) vision->periodic();
 	}
 	
 	void TestPeriodic() override {

@@ -29,7 +29,7 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
 }
 
-
+// what? why? who knows.
 double Drivetrain::GetEncoderDistance(){
 	double avg = (frontLeftWheel->GetDistanceTravelled()
 			      + rearLeftWheel->GetDistanceTravelled()
