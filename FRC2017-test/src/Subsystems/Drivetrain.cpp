@@ -23,10 +23,8 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     frontRightWheel = new Wheel(frontRightChannel, frontRightEnc);
     rearRightWheel = new Wheel(rearRightChannel, rearRightEnc);
     
-    robotDrive = new frc::RobotDrive { frontLeftChannel, rearLeftChannel,
-    			frontRightChannel, rearRightChannel };
-
-
+    robotDrive = new frc::RobotDrive(frontLeftWheel->motor, rearLeftWheel->motor,frontRightWheel->motor,rearRightWheel->motor);
+    robotDrive->SetExpiration(0.1);
 }
 
 // what? why? who knows.
@@ -67,8 +65,12 @@ void Drivetrain::Drive(float x,float y,float z){
 	frontLeftWheel->PrintSpeed("RL");
 	frontLeftWheel->PrintSpeed("FR");
 	frontLeftWheel->PrintSpeed("RR");*/
-	
+	 robotDrive->SetSafetyEnabled(false);
 	robotDrive->MecanumDrive_Cartesian(x, y, z);
+
+	//SmartDashboard::PutNumber("x", x);
+
+	//frontRightWheel->PowerOut(1);
 }
 
 void Drivetrain::DriveWithStick(int facing){

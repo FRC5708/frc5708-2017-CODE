@@ -31,13 +31,13 @@ double Winch::GetEncoderSpeed(Encoder* enc){
 
 
 void Winch::Drive(double speed){
-	leftMotor->Set(-speed*.75);
-	rightMotor->Set(speed*.75);
+	leftMotor->Set(-speed);
+	rightMotor->Set(speed);
 }
 
 void Winch::DriveWithJoystick(){
 	if (mainDriveStick->GetRawButton(1)){
-		Drive(.5);
+		Drive(4/12);
 	}else{
 		Drive(0);
 	}

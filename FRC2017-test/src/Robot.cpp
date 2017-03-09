@@ -66,7 +66,7 @@ public:
 		driveStraight = new BasicState(new DriveStraight(100), nullptr);
 		rotate = new BasicState(new Rotate(100), driveStraight);
 		initState = driveStraight;
-		table = NetworkTable::GetTable("Vision");
+		//table = NetworkTable::GetTable("Vision");
 		distances = std::vector<double>(2);
 
 		
@@ -115,7 +115,7 @@ public:
 	void activateVision() {
 		// VisionMovement::periodic() is always called.
 		if (vision) delete vision;
-		vision = new VisionMovement(&*table, drivetrain);
+		//vision = new VisionMovement(&*table, drivetrain);
 	}
 	
 	static void cameraThread() {

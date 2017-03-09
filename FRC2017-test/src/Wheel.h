@@ -19,7 +19,7 @@ public:
 	void UpdateSpeed();
 	void PowerOut(double power);
 	void PrintSpeed(llvm::StringRef name);
-private:
+//private:
 	Encoder* encoder;
 	SpeedController* motor;
 	double distanceOffset = 0;
