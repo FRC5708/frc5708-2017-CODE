@@ -26,13 +26,14 @@ double VisionMovement::getStickValue(double value, double tolerance, double corr
 
 bool VisionMovement::periodic() {
 	//TODO: timestamps.
-	if (state == VisionState::Done) return true;
+	if (state == VisionState::Done) return false;
 	
 	double z = getStickValue(table->GetNumber("viewAngle", 0), 0.1 * 2*M_PI, 0.02 * 2*M_PI, VisionState::Turning, VisionState::Strafing);
 	double x = getStickValue(table->GetNumber("xDist", 0), 0.5, 0.1, VisionState::Strafing, VisionState::Forward);
 	double y = getStickValue(table->GetNumber("yDist", 0), 4, 0, VisionState::Forward, VisionState::Done);
+	//       This value in particular should be tested for ^
 	
 	
 	drivetrain->Drive(x, y, z);
-	return false;
+	return true;
 }

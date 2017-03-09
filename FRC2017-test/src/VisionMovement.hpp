@@ -23,7 +23,7 @@ class VisionMovement {
 	
 public:
 	VisionMovement(NetworkTable* table, Drivetrain* drivetrain);
-	// returns true when finished
+	// returns false when finished
 	bool periodic();
 	
 private:

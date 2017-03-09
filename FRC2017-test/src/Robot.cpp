@@ -182,22 +182,25 @@ public:
 	}
 	
 	void TeleopPeriodic() override {
-		driveInverted = usingFrontCamera;
+		if (!(vision && vision->periodic())) {
+			
+			driveInverted = usingFrontCamera;
 
-		if (driveInverted){
-			drivetrain->DriveWithStick(-1);
-		}else{
-			drivetrain->DriveWithStick(1);
+			if (driveInverted){
+				drivetrain->DriveWithStick(-1);
+			} else {
+				drivetrain->DriveWithStick(1);
+			}
 		}
 
 		winch->DriveWithJoystick();
 		Scheduler::GetInstance()->Run();
-		
+
 		frc::Scheduler::GetInstance()->Run();
-		
+
 		if (wasButtonJustPressed(3)) toggleCamera();
 		if (wasButtonJustPressed(6)) activateVision();
-		if (vision) vision->periodic();
+
 	}
 	
 	void TestPeriodic() override {
