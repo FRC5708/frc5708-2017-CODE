@@ -6,19 +6,15 @@
 #include <math.h>
 
 
-
 class DriveUntil {
 public:
-	double x = 0, y = 0, z = 0, waitTime = 0;
+	double x, y, z;
 	std::vector<double> untilAll;
 	std::vector<double> startingVals;
 	bool finished = false;
 	
 	DriveUntil(double x, double y, double z, std::vector<double> untilAll);
 	inline DriveUntil() {finished = true; };
-	inline DriveUntil(double waitTime) { this->waitTime = waitTime; finished = true; };
-	
-	void start();
 	// returns false when finished
 	bool periodic();
 	bool shouldStop();
@@ -28,21 +24,14 @@ const double WHEEL_RADIUS = 3;
 const double DEG_TO_INCH_MULTIPLIER = 1;
 const double INCH_TO_REV_MULTIPLIER = 1.0/(WHEEL_RADIUS*M_PI);
 
-namespace AutonCommands {
-const double AUTON_SPEED = 0.5;
-
 DriveUntil turnTo(double degrees);
-inline DriveUntil driveStraight(double until) {
-	return DriveUntil(0, (until > 0)? AUTON_SPEED : -AUTON_SPEED, 0, std::vector<double>(4, until*INCH_TO_REV_MULTIPLIER));
+inline DriveUntil driveForward(double until) {
+	return DriveUntil(0, .5, 0, std::vector<double>(4, until*INCH_TO_REV_MULTIPLIER));
 }
 inline DriveUntil strafeUntil(double until) {
 	double revUntil = until*INCH_TO_REV_MULTIPLIER;
-	return DriveUntil((until > 0)? AUTON_SPEED : -AUTON_SPEED, 0, 0, {revUntil, 0, 0, 0});
-}
-inline DriveUntil waitUntil(double until) {
-	return DriveUntil(until);
+	return DriveUntil(0.25, 0, 0, {revUntil, 0, 0, 0});
 }
 
-}
 
 #endif /* SRC_DRIVEUNTIL_H_ */
