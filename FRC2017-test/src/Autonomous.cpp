@@ -8,7 +8,7 @@
 #include <Autonomous.h>
 
 void Autonomous::init() {
-	current = driveForward(0);
+	current = strafeUntil(12*7);
 }
 
 void Autonomous::periodic() {
@@ -16,10 +16,10 @@ void Autonomous::periodic() {
 		if (!current.periodic()) {
 
 			switch (state) {
-			case State::Straight1:
-				current = turnTo(0);
+			case State::Strafe:
+				current = driveForward(12*20);
 				break;
-			case State::Turning:
+			case State::Forward:
 				finished = true;
 				break;
 			}

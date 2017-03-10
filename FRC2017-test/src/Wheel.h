@@ -14,7 +14,7 @@
 class Wheel {
 public:
 	Wheel(int pin, std::vector<int> encoderPins);
-	int GetDistanceTravelled();
+	double GetDistanceTravelled();
 	void ResetDistanceTravelled();
 	void SetTargetSpeed(double speed);
 	void UpdateSpeed();

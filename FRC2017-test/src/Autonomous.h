@@ -5,8 +5,8 @@
 
 class Autonomous {
 	typedef enum {
-		Straight1,
-		Turning
+		Strafe,
+		Forward
 	} State;
 	
 public:

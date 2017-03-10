@@ -44,7 +44,7 @@ double Wheel::GetCorrection(){
 	return correction * (power * CORRECTION_CONSTANT);
 }
 
-int Wheel::GetDistanceTravelled(){
+double Wheel::GetDistanceTravelled(){
 	return encoder->Get()-distanceOffset;
 }
 
