@@ -10,7 +10,9 @@
 #include "Subsystems/Drivetrain.h"
 
 void Autonomous::init(std::vector<DriveUntil> instructions) {
-	current = instructions.begin();
+	this->instructions = instructions;
+	current = this->instructions.begin();
+	current->start();
 }
 
 void Autonomous::periodic() {
