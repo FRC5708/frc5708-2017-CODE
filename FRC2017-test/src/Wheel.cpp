@@ -1,8 +1,8 @@
 #include "Wheel.h"
 #include "Subsystems/Drivetrain.h"
 
-const double REVOLUTIONS_PER_PULSE = 1/20;
-const double GEAR_RATIO = 1/13.5;
+const double REVOLUTIONS_PER_PULSE = 1.0/20.0;
+const double GEAR_RATIO = 1.0/13.5;
 
 //Currently will set voltage when target speed is set, then adjust by small amounts.
 Wheel::Wheel(int pin, std::vector<int> encoderPins) {
@@ -45,7 +45,7 @@ double Wheel::GetCorrection(){
 }
 
 double Wheel::GetDistanceTravelled(){
-	return encoder->Get()-distanceOffset;
+	return encoder->GetDistance();
 }
 
 void Wheel::ResetDistanceTravelled(){

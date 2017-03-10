@@ -6,7 +6,8 @@
 class Autonomous {
 	typedef enum {
 		Strafe,
-		Forward
+		Forward,
+		Done
 	} State;
 	
 public:

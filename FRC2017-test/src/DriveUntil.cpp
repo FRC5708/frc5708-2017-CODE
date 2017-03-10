@@ -5,11 +5,12 @@
 
 DriveUntil::DriveUntil(double x, double y, double z, std::vector<double> all) {
 	this->x = x; this->y = y; this->z = z; this->untilAll = all;
+	startingVals = theDrivetrain->getDistances();
 }
 
 bool DriveUntil::periodic() {
 	if (!finished) {
-		if (!shouldStop()) theDrivetrain->Drive(x, y, z);
+		if (!shouldStop()) theDrivetrain->Drive(x, -y, z);
 		else finished = true;
 		return true;
 	}
@@ -18,6 +19,7 @@ bool DriveUntil::periodic() {
 
 bool DriveUntil::shouldStop() {
 	std::vector<double> encoderVals = theDrivetrain->getDistances();
+	SmartDashboard::PutNumber("an encoder", encoderVals[0]);
 	bool toReturn = true;
 	for (int i = 0; i != 4; ++i) {
 		if (encoderVals[i] - startingVals[i] < untilAll[i]) {

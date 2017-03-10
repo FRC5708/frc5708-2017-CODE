@@ -5,9 +5,9 @@
 Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
 	const static int frontLeftChannel	= 9;
-    const static int rearLeftChannel	= 5;
+    const static int rearLeftChannel	= 7;
     const static int frontRightChannel	= 8;
-    const static int rearRightChannel	= 7;
+    const static int rearRightChannel	= 5;
 
     const static std::vector<int> frontLeftEnc = {0,1};
     const static std::vector<int> rearLeftEnc = {2,3};
@@ -25,6 +25,10 @@ Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
     
     robotDrive = new frc::RobotDrive(frontLeftWheel->motor, rearLeftWheel->motor,frontRightWheel->motor,rearRightWheel->motor);
     robotDrive->SetExpiration(0.1);
+
+    robotDrive->SetInvertedMotor(RobotDrive::MotorType::kFrontRightMotor, true);
+    robotDrive->SetInvertedMotor(RobotDrive::MotorType::kRearRightMotor, true);
+
 }
 
 // what? why? who knows.
@@ -73,7 +77,7 @@ void Drivetrain::Drive(float x,float y,float z){
 	frontLeftWheel->PrintSpeed("FR");
 	frontLeftWheel->PrintSpeed("RR");*/
 	 robotDrive->SetSafetyEnabled(false);
-	robotDrive->MecanumDrive_Cartesian(x, y, z);
+	robotDrive->MecanumDrive_Cartesian(x, -y, z);
 
 	//SmartDashboard::PutNumber("x", x);
 
@@ -84,5 +88,6 @@ void Drivetrain::DriveWithStick(int facing){
 	float x = mainDriveStick->GetX();
 	float y = mainDriveStick->GetY();
 	float z = mainDriveStick->GetZ();
-	Drive(-x,y*facing,-z);
+	float SPEED = 1.2;
+	Drive(-x*SPEED,y*SPEED,z*SPEED);
 }

@@ -55,6 +55,7 @@ public:
 	std::vector<double> distances;
 	VisionMovement* vision = NULL;
 	Autonomous autonomous;
+	DriveUntil hack;
 
 
 	void RobotInit() override {
@@ -99,14 +100,16 @@ public:
 
 	void AutonomousInit() override {
 		//AutonState = initState;
-		autonomous.init();
+		//autonomous.init();
+		hack = driveForward(120);
 	}
 	
 	void AutonomousPeriodic() override {
 		//if(AutonState != nullptr) AutonState = AutonState->update();
 		frc::Scheduler::GetInstance()->Run();
-		if (vision) vision->periodic();
-		autonomous.periodic();
+		//if (vision) vision->periodic();
+		//autonomous.periodic();
+		if (!hack.periodic()) drivetrain->Drive(0, 0, 0);
 	}
 	
 	void TeleopInit() override {
