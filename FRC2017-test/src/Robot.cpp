@@ -101,7 +101,7 @@ public:
 	void AutonomousInit() override {
 		//AutonState = initState;
 		//autonomous.init();
-		hack = driveForward(120);
+		hack = driveForward(140);
 	}
 	
 	void AutonomousPeriodic() override {

@@ -44,8 +44,8 @@ double Drivetrain::GetEncoderDistance(){
 std::vector<double> Drivetrain::getDistances() {
 	return { frontLeftWheel->GetDistanceTravelled(),
 	      rearLeftWheel->GetDistanceTravelled(),
-		  frontRightWheel->GetDistanceTravelled(),
-		  rearRightWheel->GetDistanceTravelled() };
+		  -frontRightWheel->GetDistanceTravelled(),
+		  -rearRightWheel->GetDistanceTravelled() };
 }
 
 void Drivetrain::ResetDistances(){

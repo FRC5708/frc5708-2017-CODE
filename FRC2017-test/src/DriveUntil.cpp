@@ -19,7 +19,10 @@ bool DriveUntil::periodic() {
 
 bool DriveUntil::shouldStop() {
 	std::vector<double> encoderVals = theDrivetrain->getDistances();
-	SmartDashboard::PutNumber("an encoder", encoderVals[0]);
+	SmartDashboard::PutNumber("encoder 1", encoderVals[0]);
+	SmartDashboard::PutNumber("encoder 2", encoderVals[1]);
+	SmartDashboard::PutNumber("encoder 3", encoderVals[2]);
+	SmartDashboard::PutNumber("encoder 4", encoderVals[3]);
 	bool toReturn = true;
 	for (int i = 0; i != 4; ++i) {
 		if (encoderVals[i] - startingVals[i] < untilAll[i]) {
