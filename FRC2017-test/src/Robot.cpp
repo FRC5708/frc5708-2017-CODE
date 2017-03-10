@@ -100,8 +100,20 @@ public:
 
 	void AutonomousInit() override {
 		//AutonState = initState;
-		//autonomous.init();
-		hack = driveForward(140);
+		
+		//change this if needed
+		bool inCenter = true;
+
+		if (inCenter) {
+			autonomous.init({ 
+						AutonCommands::driveStraight(10*12), // to peg
+						AutonCommands::waitUntil(4), 		 // for lift
+						AutonCommands::driveStraight(-2*12), // out of lift
+						AutonCommands::strafeUntil(4*12), 
+						AutonCommands::driveStraight(5*12)   // to baseline
+			});
+		}
+		else autonomous.init({AutonCommands::driveStraight(12*12)});
 	}
 	
 	void AutonomousPeriodic() override {

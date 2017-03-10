@@ -4,20 +4,16 @@
 #include "DriveUntil.h"
 
 class Autonomous {
-	typedef enum {
-		Strafe,
-		Forward,
-		Done
-	} State;
+
 	
 public:
-	void init();
+	void init(std::vector<DriveUntil> instructions);
 	void periodic();
 	bool finished = false;
+	std::vector<DriveUntil> instructions;
+	std::vector<DriveUntil>::iterator current;
 	
 private:
-	DriveUntil current;
-	State state;
 };
 
 #endif

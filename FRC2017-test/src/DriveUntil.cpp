@@ -5,7 +5,13 @@
 
 DriveUntil::DriveUntil(double x, double y, double z, std::vector<double> all) {
 	this->x = x; this->y = y; this->z = z; this->untilAll = all;
-	startingVals = theDrivetrain->getDistances();
+}
+
+void DriveUntil::start() {
+	
+	// hack, not recommended
+	if (waitTime != 0) frc::Wait(waitTime);
+	else startingVals = theDrivetrain->getDistances();
 }
 
 bool DriveUntil::periodic() {

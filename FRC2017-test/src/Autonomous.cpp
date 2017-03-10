@@ -9,24 +9,16 @@
 #include "Globals.h"
 #include "Subsystems/Drivetrain.h"
 
-void Autonomous::init() {
-	current = strafeUntil(12*7);
+void Autonomous::init(std::vector<DriveUntil> instructions) {
+	current = instructions.begin();
 }
 
 void Autonomous::periodic() {
 	if (!finished) {
-		if (!current.periodic()) {
-
-			switch (state) {
-			case State::Strafe:
-				current = driveForward(12*12);
-				state = State::Forward;
-				break;
-			case State::Forward:
-				finished = true;
-				break;
-
-			}
+		if (!current->periodic()) {
+			++current;
+			if (current != instructions.end()) current->start();
+			else finished = true;
 		}
 	}
 	else theDrivetrain->Drive(0, 0, 0);
