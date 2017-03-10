@@ -37,7 +37,7 @@ inline DriveUntil driveStraight(double until) {
 }
 inline DriveUntil strafeUntil(double until) {
 	double revUntil = until*INCH_TO_REV_MULTIPLIER;
-	return DriveUntil((until > 0)? AUTON_SPEED : -AUTON_SPEED, 0, 0, {revUntil, 0, 0, 0});
+	return DriveUntil((until > 0)? AUTON_SPEED : -AUTON_SPEED, 0, 0, {revUntil, -revUntil, -revUntil, revUntil});
 }
 inline DriveUntil waitUntil(double until) {
 	return DriveUntil(until);

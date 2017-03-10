@@ -31,7 +31,8 @@ bool DriveUntil::shouldStop() {
 	SmartDashboard::PutNumber("encoder 4", encoderVals[3]);
 	bool toReturn = true;
 	for (int i = 0; i != 4; ++i) {
-		if (encoderVals[i] - startingVals[i] < untilAll[i]) {
+		double until = untilAll[i];
+		if ((abs(encoderVals[i] - startingVals[i]) < abs(until))) {
 			toReturn = false;
 			break;
 		}
