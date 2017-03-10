@@ -25,6 +25,7 @@ public:
 	double GetEncoderDistance();
 	void ResetDistances();
 	void DriveWithStick(int facing);
+	std::vector<int> getDistances();
 
 	constexpr static double TOP_SPEED = 100;
 };

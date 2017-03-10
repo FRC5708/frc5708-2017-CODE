@@ -37,6 +37,13 @@ double Drivetrain::GetEncoderDistance(){
 	return avg;
 }
 
+std::vector<int> Drivetrain::getDistances() {
+	return { frontLeftWheel->GetDistanceTravelled(),
+	      rearLeftWheel->GetDistanceTravelled(),
+		  frontRightWheel->GetDistanceTravelled(),
+		  rearRightWheel->GetDistanceTravelled() };
+}
+
 void Drivetrain::ResetDistances(){
 	frontLeftWheel->ResetDistanceTravelled();
 	rearLeftWheel->ResetDistanceTravelled();

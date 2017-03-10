@@ -10,10 +10,11 @@
 
 #include "WPILib.h"
 
+// Encoder values given in full revolutions of encoder
 class Wheel {
 public:
 	Wheel(int pin, std::vector<int> encoderPins);
-	double GetDistanceTravelled();
+	int GetDistanceTravelled();
 	void ResetDistanceTravelled();
 	void SetTargetSpeed(double speed);
 	void UpdateSpeed();
@@ -22,7 +23,7 @@ public:
 //private:
 	Encoder* encoder;
 	SpeedController* motor;
-	double distanceOffset = 0;
+	int distanceOffset = 0;
 	const double CIRCUMFERENCE = 6*3.14;
 	const double CORRECTION_CONSTANT = .01;
 	bool enabled = true;

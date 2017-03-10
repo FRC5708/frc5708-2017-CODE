@@ -28,6 +28,7 @@
 #include "Commands/DriveStraight.h"
 #include "Commands/Rotate.h"
 #include "VisionMovement.hpp"
+#include "Autonomous.h"
 
 
 
@@ -52,8 +53,8 @@ public:
 	std::shared_ptr<NetworkTable> table;
 
 	std::vector<double> distances;
-	
 	VisionMovement* vision = NULL;
+	Autonomous autonomous;
 
 
 	void RobotInit() override {
@@ -97,13 +98,15 @@ public:
 	
 
 	void AutonomousInit() override {
-		AutonState = initState;
+		//AutonState = initState;
+		autonomous.init();
 	}
 	
 	void AutonomousPeriodic() override {
-		if(AutonState != nullptr) AutonState = AutonState->update();
+		//if(AutonState != nullptr) AutonState = AutonState->update();
 		frc::Scheduler::GetInstance()->Run();
 		if (vision) vision->periodic();
+		autonomous.periodic();
 	}
 	
 	void TeleopInit() override {
@@ -199,7 +202,7 @@ public:
 		frc::Scheduler::GetInstance()->Run();
 
 		if (wasButtonJustPressed(3)) toggleCamera();
-		if (wasButtonJustPressed(6)) activateVision();
+		//if (wasButtonJustPressed(6)) activateVision();
 
 	}
 	
