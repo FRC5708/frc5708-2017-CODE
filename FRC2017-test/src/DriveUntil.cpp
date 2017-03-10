@@ -10,7 +10,10 @@ DriveUntil::DriveUntil(double x, double y, double z, std::vector<double> all) {
 void DriveUntil::start() {
 	
 	// hack, not recommended
-	if (waitTime != 0) frc::Wait(waitTime);
+	if (waitTime != 0){
+		theDrivetrain->Drive(0,0,0);
+		frc::Wait(waitTime);
+	}
 	else startingVals = theDrivetrain->getDistances();
 }
 

@@ -24,9 +24,9 @@ public:
 	bool shouldStop();
 };
 
-const double WHEEL_RADIUS = 3;
+const double WHEEL_DIAMETER = 6;
 const double DEG_TO_INCH_MULTIPLIER = 1;
-const double INCH_TO_REV_MULTIPLIER = 1.0/(WHEEL_RADIUS*M_PI);
+const double INCH_TO_REV_MULTIPLIER = 1.0/(WHEEL_DIAMETER*M_PI);
 
 namespace AutonCommands {
 const double AUTON_SPEED = 0.5;
