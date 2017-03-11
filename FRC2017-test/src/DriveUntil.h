@@ -10,11 +10,11 @@
 class DriveUntil {
 public:
 	double x = 0, y = 0, z = 0, waitTime = 0;
-	std::vector<double> untilAll;
+	std::vector<double> untilOne;
 	std::vector<double> startingVals;
 	bool finished = false;
 	
-	DriveUntil(double x, double y, double z, std::vector<double> untilAll);
+	DriveUntil(double x, double y, double z, std::vector<double> untilOne);
 	inline DriveUntil() {finished = true; };
 	inline DriveUntil(double waitTime) { this->waitTime = waitTime; finished = true; };
 	

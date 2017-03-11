@@ -3,8 +3,8 @@
 #include "Globals.h"
 
 
-DriveUntil::DriveUntil(double x, double y, double z, std::vector<double> all) {
-	this->x = x; this->y = y; this->z = z; this->untilAll = all;
+DriveUntil::DriveUntil(double x, double y, double z, std::vector<double> one) {
+	this->x = x; this->y = y; this->z = z; this->untilOne = one;
 }
 
 void DriveUntil::start() {
@@ -29,11 +29,11 @@ bool DriveUntil::shouldStop() {
 	SmartDashboard::PutNumber("encoder 2", encoderVals[1]);
 	SmartDashboard::PutNumber("encoder 3", encoderVals[2]);
 	SmartDashboard::PutNumber("encoder 4", encoderVals[3]);
-	bool toReturn = true;
+	bool toReturn = false;
 	for (int i = 0; i != 4; ++i) {
-		double until = untilAll[i];
-		if ((abs(encoderVals[i] - startingVals[i]) < abs(until))) {
-			toReturn = false;
+		double until = untilOne[i];
+		if (encoderVals[i] != 0 && abs(encoderVals[i] - startingVals[i]) > abs(until)) {
+			toReturn = true;
 			break;
 		}
 	}
