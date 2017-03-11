@@ -108,12 +108,12 @@ public:
 			autonomous.init({ 
 						AutonCommands::driveStraight(111), // to peg
 						AutonCommands::waitUntil(5), 		 // for lift
-						AutonCommands::driveStraight(-2*12), // out of lift
+						AutonCommands::driveStraight(-4*12), // out of lift
 						AutonCommands::strafeUntil(4*12), 
 						AutonCommands::driveStraight(5*12)   // to baseline
 			});
 		}
-		else autonomous.init({AutonCommands::driveStraight(12*12)});
+		else autonomous.init({AutonCommands::driveStraight(11*12)});
 	}
 	
 	void AutonomousPeriodic() override {
