@@ -36,8 +36,10 @@ void Winch::Drive(double speed){
 }
 
 void Winch::DriveWithJoystick(){
-	if (mainDriveStick->GetRawButton(1)){
+	if (mainDriveStick->GetRawButton(6)){
 		Drive(1);
+	}else if (mainDriveStick->GetRawButton(4)){
+		Drive(.7);
 	}else{
 		Drive(0);
 	}
