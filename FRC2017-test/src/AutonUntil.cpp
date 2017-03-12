@@ -13,7 +13,7 @@ void DriveUntil::start() {
 
 bool DriveUntil::periodic() {
 	if (!finished) {
-		if (!shouldStop()) theDrivetrain->Drive(x, -y, z);
+		if (!shouldStop()) theDrivetrain->Drive(x, y, z);
 		else finished = true;
 		return true;
 	}

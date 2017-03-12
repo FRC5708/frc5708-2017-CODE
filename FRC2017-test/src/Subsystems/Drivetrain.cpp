@@ -77,7 +77,7 @@ void Drivetrain::Drive(float x,float y,float z){
 	frontLeftWheel->PrintSpeed("FR");
 	frontLeftWheel->PrintSpeed("RR");*/
 	 robotDrive->SetSafetyEnabled(false);
-	robotDrive->MecanumDrive_Cartesian(x, -y, z);
+	robotDrive->MecanumDrive_Cartesian(x, y, z);
 
 	//SmartDashboard::PutNumber("x", x);
 
@@ -89,5 +89,5 @@ void Drivetrain::DriveWithStick(int facing){
 	float y = mainDriveStick->GetY();
 	float z = mainDriveStick->GetZ();
 	float SPEED = 1.2;
-	Drive(-x*SPEED,y*SPEED,z*SPEED);
+	Drive(-x*SPEED,-y*SPEED,z*SPEED);
 }

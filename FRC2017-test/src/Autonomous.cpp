@@ -10,7 +10,7 @@
 #include "Subsystems/Drivetrain.h"
 
 void Autonomous::init(std::vector<AutonUntil*> instructions) {
-	deinit();
+	stop();
 	this->instructions = instructions;
 	current = this->instructions.begin();
 	(*current)->start();
@@ -27,9 +27,10 @@ void Autonomous::periodic() {
 	else theDrivetrain->Drive(0, 0, 0);
 }
 
-void Autonomous::deinit() {
+void Autonomous::stop() {
+	finished = true;
 	FOREACH(instructions, i) {
 		delete *i;
 	}
-	instructions = std::vector();
+	instructions = std::vector<AutonUntil*>();
 }

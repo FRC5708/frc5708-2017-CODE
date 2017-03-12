@@ -8,7 +8,7 @@ class Autonomous {
 	
 public:
 	void init(std::vector<AutonUntil*> instructions);
-	void deinit();
+	void stop();
 	void periodic();
 	bool finished = false;
 	std::vector<AutonUntil*> instructions;

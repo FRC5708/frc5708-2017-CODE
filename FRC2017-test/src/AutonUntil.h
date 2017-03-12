@@ -7,11 +7,12 @@
 
 
 class AutonUntil {
+public:
 	bool finished = false;
 	virtual void start() = 0;
 	virtual bool periodic() = 0;
 	inline AutonUntil() { finished = true; };
-	virtual ~AutonUntil();
+	virtual ~AutonUntil(){};
 };
 
 class DriveUntil : public AutonUntil {

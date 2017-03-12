@@ -54,7 +54,7 @@ public:
 
 	std::vector<double> distances;
 	Autonomous autonomous;
-	//DriveUntil hack;
+	DoVision* teleopVision = NULL;
 
 
 	void RobotInit() override {
@@ -105,7 +105,7 @@ public:
 		// in center
 		autonomous.init({
 			AutonCommands::driveStraight(47),
-			new DoVision(table)
+			new DoVision(table, 15000)
 		});
 	}
 	
@@ -118,13 +118,12 @@ public:
 	}
 	
 	void TeleopInit() override {
-		if (AutonState != nullptr) {
-			AutonState->StopState();
-		}
+		autonomous.stop();
 	}
 
 	void activateVision() {
-		
+		if (teleopVision) delete teleopVision;
+		teleopVision = new DoVision(table, 1500);
 	}
 	
 	static void cameraThread() {
@@ -191,7 +190,7 @@ public:
 	}
 	
 	void TeleopPeriodic() override {
-		if (!(vision && vision->periodic())) {
+		if (!(teleopVision && teleopVision->periodic())) {
 			
 			driveInverted = usingFrontCamera;
 
