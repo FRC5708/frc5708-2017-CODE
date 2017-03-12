@@ -1,4 +1,4 @@
-#include <DriveUntil.h>
+#include <AutonUntil.h>
 #include "Subsystems/Drivetrain.h"
 #include "Globals.h"
 
@@ -8,10 +8,7 @@ DriveUntil::DriveUntil(double x, double y, double z, std::vector<double> one) {
 }
 
 void DriveUntil::start() {
-	
-	// hack, not recommended
-	if (waitTime != 0) frc::Wait(waitTime);
-	else startingVals = theDrivetrain->getDistances();
+	startingVals = theDrivetrain->getDistances();
 }
 
 bool DriveUntil::periodic() {
@@ -40,9 +37,25 @@ bool DriveUntil::shouldStop() {
 	return toReturn;
 }
 
-
-DriveUntil turnTo(double degrees) {
-	double turnAmount = degrees * DEG_TO_INCH_MULTIPLIER * INCH_TO_REV_MULTIPLIER;
-	return DriveUntil(0, 0, degrees > 0 ? 1 : -1, std::vector<double>(4, turnAmount));
+void WaitUntil::start() {
+	frc::Wait(seconds);
+}
+bool WaitUntil::periodic() {
+	return false;
 }
 
+namespace AutonCommands {
+
+DriveUntil* driveStraight(double until) {
+	return new DriveUntil(0, (until > 0)? AUTON_SPEED : -AUTON_SPEED, 0, std::vector<double>(4, until*INCH_TO_REV_MULTIPLIER));
+}
+DriveUntil* turnTo(double degrees) {
+	double turnAmount = degrees * DEG_TO_INCH_MULTIPLIER * INCH_TO_REV_MULTIPLIER;
+	return new DriveUntil(0, 0, degrees > 0 ? 1 : -1, std::vector<double>(4, turnAmount));
+}
+DriveUntil* strafeUntil(double until) {
+	double revUntil = until*INCH_TO_REV_MULTIPLIER;
+	return new DriveUntil((until > 0)? AUTON_SPEED : -AUTON_SPEED, 0, 0, {revUntil, -revUntil, -revUntil, revUntil});
+}
+
+}

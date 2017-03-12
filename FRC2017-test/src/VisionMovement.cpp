@@ -1,19 +1,17 @@
 #include "VisionMovement.hpp"
-
+#include "Globals.h"
 
 const double CORRECTION_MULTIPLIER = 0.2;
 
-VisionMovement::VisionMovement(NetworkTable* table, Drivetrain* drivetrain) {
-	this->table = table; this->drivetrain = drivetrain;
-}
 
-double VisionMovement::getValue(double visionOutput, double tolerance) {
-	if (visionOutput > tolerance) return 1;
-	else if (visionOutput < -tolerance) return -1;
+
+double DoVision::getValue(double visionOutput, double tolerance) {
+	if (visionOutput > tolerance) return .5;
+	else if (visionOutput < -tolerance) return -.5;
 	else return 0;
 }
 
-double VisionMovement::getStickValue(double value, double tolerance, double correctionTolerance, VisionState relevantState, VisionState nextState) {
+double DoVision::getStickValue(double value, double tolerance, double correctionTolerance, VisionState relevantState, VisionState nextState) {
 	double toReturn;
 	if (state == relevantState) {
 		toReturn = getValue(value, tolerance);
@@ -24,7 +22,7 @@ double VisionMovement::getStickValue(double value, double tolerance, double corr
 	return toReturn;
 }
 
-bool VisionMovement::periodic() {
+bool DoVision::periodic() {
 	//TODO: timestamps.
 	if (state == VisionState::Done) return false;
 	
@@ -34,6 +32,10 @@ bool VisionMovement::periodic() {
 	//       This value in particular should be tested for ^
 	
 	
-	drivetrain->Drive(x, y, z);
+	theDrivetrain->Drive(x, y, z);
 	return true;
+}
+
+void DoVision::start() {
+	
 }

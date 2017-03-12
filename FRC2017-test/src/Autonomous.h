@@ -1,17 +1,18 @@
 #ifndef SRC_AUTONOMOUS_H_
 #define SRC_AUTONOMOUS_H_
 
-#include "DriveUntil.h"
+#include <AutonUntil.h>
 
 class Autonomous {
 
 	
 public:
-	void init(std::vector<DriveUntil> instructions);
+	void init(std::vector<AutonUntil*> instructions);
+	void deinit();
 	void periodic();
 	bool finished = false;
-	std::vector<DriveUntil> instructions;
-	std::vector<DriveUntil>::iterator current;
+	std::vector<AutonUntil*> instructions;
+	std::vector<AutonUntil*>::iterator current;
 	
 private:
 };

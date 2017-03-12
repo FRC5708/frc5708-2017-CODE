@@ -53,7 +53,6 @@ public:
 	std::shared_ptr<NetworkTable> table;
 
 	std::vector<double> distances;
-	VisionMovement* vision = NULL;
 	Autonomous autonomous;
 	//DriveUntil hack;
 
@@ -99,21 +98,15 @@ public:
 	
 
 	void AutonomousInit() override {
-		//AutonState = initState;
 		
-		//change this if needed
-		bool inCenter = true;
-
-		if (inCenter) {
-			autonomous.init({ 
-						AutonCommands::driveStraight(10*12), // to peg
-						AutonCommands::waitUntil(4), 		 // for lift
-						AutonCommands::driveStraight(-2*12), // out of lift
-						AutonCommands::strafeUntil(4*12), 
-						AutonCommands::driveStraight(5*12)   // to baseline
-			});
-		}
-		else autonomous.init({AutonCommands::driveStraight(12*12)});
+		// basic
+		//autonomous.init({AutonCommands::driveStraight(12*12)});
+		
+		// in center
+		autonomous.init({
+			AutonCommands::driveStraight(47),
+			new DoVision(table)
+		});
 	}
 	
 	void AutonomousPeriodic() override {
@@ -131,9 +124,7 @@ public:
 	}
 
 	void activateVision() {
-		// VisionMovement::periodic() is always called.
-		if (vision) delete vision;
-		//vision = new VisionMovement(&*table, drivetrain);
+		
 	}
 	
 	static void cameraThread() {
