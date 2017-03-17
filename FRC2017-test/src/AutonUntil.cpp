@@ -13,12 +13,14 @@ void DriveUntil::start() {
 
 bool DriveUntil::periodic() {
 	if (!finished) {
-		if (!shouldStop()) theDrivetrain->Drive(x, y, z);
+		float angle = theGyro->GetAngle();
+		if (!shouldStop()) theDrivetrain->Drive(x, y, (-angle*.03)+z);
 		else finished = true;
 		return true;
 	}
 	else return false;
 }
+
 
 bool DriveUntil::shouldStop() {
 	std::vector<double> encoderVals = theDrivetrain->getDistances();

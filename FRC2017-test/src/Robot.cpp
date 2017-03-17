@@ -1,4 +1,3 @@
-#include <BasicState.h>
 #include <memory>
 #include <vector>
 #include <thread>
@@ -24,7 +23,6 @@
 #include "CommandBase.h"
 #include "Subsystems/Winch.h"
 #include "Globals.h"
-#include "BasicState.h"
 #include "Commands/DriveStraight.h"
 #include "Commands/Rotate.h"
 #include "VisionMovement.hpp"
@@ -42,13 +40,9 @@ public:
 	Joystick* stick;
 	Drivetrain *drivetrain;
 	Winch *winch;
+	AnalogGyro* gyro;
 
 	bool driveInverted = false;
-
-	BasicState* driveStraight;
-	BasicState* rotate;
-	BasicState* initState;
-	BasicState* AutonState;
 	
 	std::shared_ptr<NetworkTable> table;
 
@@ -61,14 +55,10 @@ public:
 		theRobot = this;
 		
 		drivetrain = new Drivetrain();
+		gyro = new AnalogGyro(1);
 		theDrivetrain = drivetrain;
+		theGyro = gyro;
 		winch = new Winch();
-
-		driveStraight = new BasicState(new DriveStraight(100), nullptr);
-		rotate = new BasicState(new Rotate(100), driveStraight);
-		initState = driveStraight;
-		//table = NetworkTable::GetTable("Vision");
-		distances = std::vector<double>(2);
 
 		
 		stick = new frc::Joystick(0);

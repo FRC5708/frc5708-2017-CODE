@@ -28,6 +28,7 @@ public:
 	virtual void start() override;
 	// returns false when finished
 	virtual bool periodic() override;
+	virtual bool periodicWithCorrection(int correctionVector[4]);
 	bool shouldStop();
 };
 

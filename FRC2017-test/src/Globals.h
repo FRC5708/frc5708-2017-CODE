@@ -1,9 +1,11 @@
 #ifndef Globals_H
 #define Globals_H
+#include "WPILib.h"
 
 
 class Drivetrain;
 extern Drivetrain* theDrivetrain;
+extern AnalogGyro* theGyro;
 
 #define FOREACH(array, i) for(auto i = (array).begin(); i != (array).end(); ++i)
 
