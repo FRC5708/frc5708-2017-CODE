@@ -18,7 +18,7 @@
 
 
 #include "WPILib.h"
-#include "CommandBase.h"
+//#include "CommandBase.h"
 #include "Subsystems/Drivetrain.h"
 //#include "Commands/Autonomous.h"
 #include "Subsystems/Winch.h"
@@ -143,7 +143,7 @@ public:
 					backSink.SetEnabled(true);
 				}
 			}
-			oldUsingFront = usingFrontCamera;
+			oldUsingFront = theRobot->usingFrontCamera;
 			
 			
 			if (usingFront) {

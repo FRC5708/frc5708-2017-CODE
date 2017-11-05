@@ -6,7 +6,7 @@
 
 #include <Commands/Command.h>
 
-#include "OI.h"
+#include "Triggers/OI.h"
 #include "Subsystems/ExampleSubsystem.h"
 
 /**

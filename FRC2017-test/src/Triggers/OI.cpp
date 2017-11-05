@@ -1,4 +1,4 @@
-#include "OI.h"
+#include "Triggers/OI.h"
 
 #include <WPILib.h>
 
