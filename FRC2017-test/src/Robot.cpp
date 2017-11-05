@@ -29,6 +29,7 @@
 #include "Commands/Rotate.h"
 #include "VisionMovement.hpp"
 #include "Autonomous.h"
+#include <ADXRS450_Gyro.h>
 
 
 
@@ -44,17 +45,13 @@ public:
 	Winch *winch;
 
 	bool driveInverted = false;
-
-	BasicState* driveStraight;
-	BasicState* rotate;
-	BasicState* initState;
-	BasicState* AutonState;
 	
 	std::shared_ptr<NetworkTable> table;
 
 	std::vector<double> distances;
 	VisionMovement* vision = NULL;
 	Autonomous autonomous;
+	RobotDrive* drive;
 	//DriveUntil hack;
 
 
@@ -64,12 +61,9 @@ public:
 		drivetrain = new Drivetrain();
 		theDrivetrain = drivetrain;
 		winch = new Winch();
-
-		driveStraight = new BasicState(new DriveStraight(100), nullptr);
-		rotate = new BasicState(new Rotate(100), driveStraight);
-		initState = driveStraight;
 		//table = NetworkTable::GetTable("Vision");
 		distances = std::vector<double>(2);
+		drive = new RobotDrive(9,7,8,5);
 
 		
 		stick = new frc::Joystick(0);
@@ -125,9 +119,6 @@ public:
 	}
 	
 	void TeleopInit() override {
-		if (AutonState != nullptr) {
-			AutonState->StopState();
-		}
 	}
 
 	void activateVision() {
@@ -204,6 +195,21 @@ public:
 			
 			driveInverted = usingFrontCamera;
 
+			/*Day337:
+			I'm beginnig to feel the effects of dehydration on my phsyci.
+			My vision is becomming blurred and its getting more and more difficult to think clearly.
+			I dontnow how much longer I can last.
+
+			Day338;
+			I saw my dead mom today,the hallucination are getting more vivid and more frequent.
+			Im worried soon I wont be able to discern them from reality. Then Ill have really lost my mind
+
+			Day339:
+			I should be dead by now. I mean, almost 340 days without water isnt natural.
+			I dont think I can take this much longer, and im worried that when I finally decide to end this,
+			I wont even be able to die by my own hand.*/
+
+
 			if (driveInverted){
 				drivetrain->DriveWithStick(-1);
 			} else {
@@ -211,7 +217,7 @@ public:
 			}
 		}
 
-		winch->DriveWithJoystick();
+		//winch->DriveWithJoystick();
 		Scheduler::GetInstance()->Run();
 
 		frc::Scheduler::GetInstance()->Run();

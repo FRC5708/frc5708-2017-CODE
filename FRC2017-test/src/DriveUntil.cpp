@@ -19,7 +19,8 @@ void DriveUntil::start() {
 
 bool DriveUntil::periodic() {
 	if (!finished) {
-		if (!shouldStop()) theDrivetrain->Drive(x, -y, z);
+		//float angle =theGyro->GetAngle();
+		if (!shouldStop()) theDrivetrain->Drive(x, -y,z);// (angle*.03)+z);
 		else finished = true;
 		return true;
 	}
@@ -32,11 +33,11 @@ bool DriveUntil::shouldStop() {
 	SmartDashboard::PutNumber("encoder 2", encoderVals[1]);
 	SmartDashboard::PutNumber("encoder 3", encoderVals[2]);
 	SmartDashboard::PutNumber("encoder 4", encoderVals[3]);
-	bool toReturn = true;
+	bool toReturn = false;
 	for (int i = 0; i != 4; ++i) {
 		double until = untilAll[i];
-		if ((abs(encoderVals[i] - startingVals[i]) < abs(until))) {
-			toReturn = false;
+		if ((abs(encoderVals[i] - startingVals[i]) > abs(until))) {
+			toReturn = true;
 			break;
 		}
 	}
