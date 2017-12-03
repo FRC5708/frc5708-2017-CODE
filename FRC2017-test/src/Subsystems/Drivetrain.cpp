@@ -1,6 +1,6 @@
 #include "Drivetrain.h"
 #include "../RobotMap.h"
-#include "WPIlib.h"
+#include "WPILib.h"
 
 Drivetrain::Drivetrain() : Subsystem("DriveTrain") {
 
