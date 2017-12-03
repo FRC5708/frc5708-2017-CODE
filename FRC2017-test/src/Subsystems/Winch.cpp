@@ -1,6 +1,6 @@
 #include "Winch.h"
 #include "../RobotMap.h"
-#include "WPILIB.h"
+#include "WPILib.h"
 
 Winch::Winch() : Subsystem("Winch") {
 
