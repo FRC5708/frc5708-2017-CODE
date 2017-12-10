@@ -11,6 +11,9 @@
 #include <CameraServer.h>
 #include <Joystick.h>
 
+#include <NetworkTables/NetworkTable.h>
+
+
 #include "Commands/ExampleCommand.h"
 
 #include <opencv2/core/core.hpp>
@@ -34,6 +37,7 @@ public:
 	frc::Joystick* stick;
 	Drivetrain *mainDrivetrain;
 	Winch *winch;
+	std::shared_ptr<NetworkTable> table ;
 	bool driveInverted = false;
 	
 	//std::shared_ptr<Drivetrain> Robot::drivetrain = std::make_shared<Drivetrain>();
@@ -44,6 +48,10 @@ public:
 		//CommandBase::init();
 		mainDrivetrain = new Drivetrain();
 		winch = new Winch();
+
+		NetworkTable::SetClientMode();
+		NetworkTable::SetIPAddress("roboRIO-5708-FRC.local");
+		table = NetworkTable::GetTable("Vision");
 		//chooser = new SendableChooser();
 		//chooser->AddDefault("Default Auto", new Autonomous());
 		//chooser->AddObject("My Auto", new MyAutoCommand());
@@ -107,6 +115,20 @@ public:
 	
 	void AutonomousPeriodic() override {
 		frc::Scheduler::GetInstance()->Run();
+
+		double xDist, yDist, viewAngle, Dist;
+		if (table->GetBoolean("succeeded")){
+			xDist = table->GetNumber("xDist",0.0);
+			yDist = table->GetNumber("yDist",0.0);
+			viewAngle = table->GetNumber("viewAngle",0.0);
+			Dist = table->GetNumber("Dist",0.0);
+			printf("\n\
+				distance: %f\n\
+				x distance: %f\n\
+				y distance: %f\n\
+				view angle: %f\n",
+                Dist, xDist, yDist, viewAngle);
+		}
 	}
 	
 	void TeleopInit() override {
