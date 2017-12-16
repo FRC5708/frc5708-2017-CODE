@@ -2,8 +2,8 @@
 
 ## How to import project into eclipse
 
-If you don't see the option listed, you should probably click "next".
+1. Create a new WPIlib C++ project (choose command-based or iterative, doesn't matter)
 
-File->Import->Git->Projects from Git->Clone URI->paste the clone URL->select branch->Put where you want to keep the project->Import using the New Project wizard->click finish->WPILib Robot C++ Development->Robot C++ Project->Command based Robot->Finish. Ignore any errors about "Git team provider." Click cancel if the wizard is still open. You should see the project in the project explorer (Window->Show View->Project Explorer).
+2. Delete the src folder
 
-vision code (not integrated with main project): https://github.com/maximumsomething/team-5708-vision
+3. From the git repository, drag in the src folder. Choose the option to link it, not copy it.
